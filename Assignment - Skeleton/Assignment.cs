@@ -4,14 +4,13 @@ using Microsoft.Xna.Framework.Input;
 
 namespace CS5410
 {
-    public class Assignment : Game
+    public partial class Assignment : Game
     {
         Texture2D m_ballTexture;
         Vector2 m_ballPosition;
         float m_ballSpeed;
 
-        // HEY Trent, do this here. 
-        private Nodey array[,,] maze;
+        private TileState[,,] maze;
 
 
         private GraphicsDeviceManager m_graphics;
@@ -22,7 +21,6 @@ namespace CS5410
             m_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
-            maze
         }
 
         protected override void Initialize()
@@ -49,27 +47,7 @@ namespace CS5410
             m_ballTexture = Content.Load<Texture2D>("ball");
 
         }
-        protected void ProcessInput(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-            {
-                Exit();
-            }
-
-            var kstate = Keyboard.GetState();
-
-            if (kstate.IsKeyDown(Keys.Up))
-                m_ballPosition.Y -= m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (kstate.IsKeyDown(Keys.Down))
-                m_ballPosition.Y += m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (kstate.IsKeyDown(Keys.Left))
-                m_ballPosition.X -= m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-
-            if (kstate.IsKeyDown(Keys.Right))
-                m_ballPosition.X += m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
-        }
+        
 
         protected override void Update(GameTime gameTime)
         {
@@ -103,18 +81,4 @@ namespace CS5410
         }
     }
 
-
-
-    public struct Nodey
-    {
-        public Nodey()
-        {
-            isWall = false;
-            isBreadcrumb = false;
-            isShortestPath = false;
-        }
-        bool isWall { get; set; }
-        bool isBreadcrumb { get; set; }
-        bool isShortestPath { get; set; }
-    }
 }
