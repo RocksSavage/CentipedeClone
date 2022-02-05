@@ -40,6 +40,34 @@ namespace CS5410
 
             if (kstate.IsKeyDown(Keys.Right))
                 m_ballPosition.X += m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            // its best to run all meeple movements before generating a new maze so as not to 
+            // create an annoying but where the player starts off a couple turns in. 
+
+            //if (kstate.)
+            //Dean said he might do this later?
+        }
+
+        private TileState[,] generateRandomMaze(int size)
+        {
+            // demo: make a simple 2x2 maze with one wall in it. 
+            TileState bob = new TileState(true, true, true);
+
+            return new TileState[3, 3]
+            {
+                { new TileState(false,false,false),
+                    new TileState(true, false, false),
+                    new TileState(false, false, false)
+                },
+                {  new TileState(false,false,false),
+                 new TileState(false,false,false),
+                 new TileState(false,false,false)
+                },
+                {  new TileState(false,false,false),
+                 new TileState(false,false,false),
+                 new TileState(false,false,false)
+                }
+            };
         }
     }
 }

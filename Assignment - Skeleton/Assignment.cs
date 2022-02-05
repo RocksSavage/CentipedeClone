@@ -12,7 +12,6 @@ namespace CS5410
 
         private TileState[,,] maze;
 
-
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
 
@@ -75,6 +74,18 @@ namespace CS5410
                 SpriteEffects.None,
                 0f
             );
+
+            Rectangle myBox = new Rectangle(5, 5, 400, 400);
+            
+            Texture2D _texture;
+
+            _texture = new Texture2D(GraphicsDevice, 1, 1);
+            _texture.SetData(new Color[] { Color.DarkSlateGray });
+
+            m_spriteBatch.Draw(_texture, myBox, Color.White);
+
+
+
             m_spriteBatch.End();
 
             base.Draw(gameTime);
