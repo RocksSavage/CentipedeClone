@@ -1,0 +1,16 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "8b62173a-2e4d-4c18-8d04-b3a0c26d78c2": {
+      "ProjectGuid": "8b62173a-2e4d-4c18-8d04-b3a0c26d78c2",
+      "DisplayName": "Assignment - Skeleton",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 1
+}
