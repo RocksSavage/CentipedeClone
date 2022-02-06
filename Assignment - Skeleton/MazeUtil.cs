@@ -15,9 +15,9 @@ namespace CS5410
                 this.isBreadCrumb = isBreadCrumb;
                 this.isShortestPath = isShortestPath;
             }
-            bool isWall { get; set; }
-            bool isBreadCrumb { get; set; }
-            bool isShortestPath { get; set; }
+            public bool isWall { get; set; }
+            public bool isBreadCrumb { get; set; }
+            public bool isShortestPath { get; set; }
         }
 
         protected void ProcessInput(GameTime gameTime)
@@ -29,17 +29,17 @@ namespace CS5410
 
             var kstate = Keyboard.GetState();
 
-            if (kstate.IsKeyDown(Keys.Up))
-                m_ballPosition.Y -= m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //if (kstate.IsKeyDown(Keys.Up))
+            //    m_ballPosition.Y -= m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (kstate.IsKeyDown(Keys.Down))
-                m_ballPosition.Y += m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //if (kstate.IsKeyDown(Keys.Down))
+            //    m_ballPosition.Y += m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (kstate.IsKeyDown(Keys.Left))
-                m_ballPosition.X -= m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //if (kstate.IsKeyDown(Keys.Left))
+            //    m_ballPosition.X -= m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (kstate.IsKeyDown(Keys.Right))
-                m_ballPosition.X += m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //if (kstate.IsKeyDown(Keys.Right))
+            //    m_ballPosition.X += m_ballSpeed * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             // its best to run all meeple movements before generating a new maze so as not to 
             // create an annoying but where the player starts off a couple turns in. 
