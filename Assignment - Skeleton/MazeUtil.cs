@@ -9,14 +9,14 @@ namespace CS5410
 
         public struct TileState
         {
-            public TileState(bool isWall, bool isBreadCrumb, bool isShortestPath)
+            public TileState(bool isWall, bool isVisited, bool isShortestPath)
             {
                 this.isWall = isWall;
-                this.isBreadCrumb = isBreadCrumb;
+                this.isVisited = isVisited;
                 this.isShortestPath = isShortestPath;
             }
             public bool isWall { get; set; }
-            public bool isBreadCrumb { get; set; }
+            public bool isVisited { get; set; }
             public bool isShortestPath { get; set; }
         }
 
@@ -60,11 +60,11 @@ namespace CS5410
                     new TileState(false, false, false)
                 },
                 {  new TileState(false,false,false),
-                 new TileState(false,false,false),
+                 new TileState(true,false,false),
                  new TileState(false,false,false)
                 },
                 {  new TileState(false,false,false),
-                 new TileState(false,false,false),
+                 new TileState(true,false,false),
                  new TileState(false,false,false)
                 }
             };

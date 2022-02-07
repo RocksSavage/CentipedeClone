@@ -8,6 +8,8 @@ namespace CS5410
     {
         Texture2D m_ballTexture;
         Texture2D m_BGTexture;
+        Texture2D m_FootPrintTexture;
+        Texture2D m_ShortestPathTexture;
         static int m_MazeSizePx = 500;
         static int m_MazeWallSizePx = 4;
 
@@ -82,29 +84,61 @@ namespace CS5410
 
             // calc sizes
             int n = (maze.GetLength(0) + 1) / 2;
-            int TileSizePx = m_MazeSizePx / n - 2;
+            int TileSizePx = m_MazeSizePx / n - 2; // subtract 2 to make space for walls
 
             // draw maze internals
+            int x = 2;
+            int y = 2;
             for (int i = 0; i < maze.GetLength(0); i++)
             {
-                for(int j = 0; j < maze.GetLength(0); j++)
+                x = 2;
+                y += i % 2 == 0 ? TileSizePx : 4;
+
+                for (int j = 0; j < maze.GetLength(0); j++)
                 {
-                    if (j % 2 == 0)
+                    if (i % 2 == 0) // even rows (rows with breadcrumbs & walls)
                     {
-                        // case where this is a wall section we are considering
-                        if (maze[i,j].isWall)
-                        { }
+                        
+                        
+                        if (j % 2 == 0) // even cells (columns for breadcrumbs)
+                        {
+                            // case where we consider drawing breadcrumbs
+
+                            if (maze[i, j].isVisited)
+                            //m_spriteBatch.Draw()
+                            {
+                                //m_spriteBatch.Draw(new Rectangle(x, y, TileSizePx, TileSizePx));
+                            }
+                            if (maze[i, j].isShortestPath)
+                            { }
+
+                            x += TileSizePx;
+
+                            
+                        }
+                        else // odd cells (columns for vertical walls)
+                        {
+                            if (maze[i, j].isWall) // case where this is a vertical wall section we are considering
+                            {
+                                m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx), Color.White);
+                            }
+
+                            x += 4;
+                        }
                     }
-                    else
+                    else // odd rows ( horizontal walls only)
                     {
-                        if (maze[i, j].isBreadCrumb)
-                        //m_spriteBatch.Draw()
-                        { }
-                        if (maze[i, j].isShortestPath)
-                        { }
+                        if (j%2==0)
+                            if (maze[i, j].isWall) // case where this is a horizontal wall section we are considering
+                                m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx, m_MazeWallSizePx), Color.White);
+
+                        x += TileSizePx + 4;
                     }
                 }
             }
+
+
+            
 
             m_spriteBatch.End();
 
