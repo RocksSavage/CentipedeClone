@@ -78,67 +78,74 @@ namespace CS5410
 
             m_spriteBatch.Draw(_texture, new Rectangle(0, 0, m_MazeWallSizePx, m_MazeSizePx), Color.White);
             m_spriteBatch.Draw(_texture, new Rectangle(0, 0, m_MazeSizePx, m_MazeWallSizePx), Color.White);
-            
+
             m_spriteBatch.Draw(_texture, new Rectangle(0, m_MazeSizePx - 5, m_MazeSizePx, m_MazeWallSizePx), Color.White);
             m_spriteBatch.Draw(_texture, new Rectangle(m_MazeSizePx - 5, 0, m_MazeWallSizePx, m_MazeSizePx), Color.White);
 
             // calc sizes
-            int n = (maze.GetLength(0) + 1) / 2;
-            int TileSizePx = m_MazeSizePx / n - 2; // subtract 2 to make space for walls
+            //int TileSizePx = m_MazeSizePx / n - 2; // subtract 2 to make space for walls
 
             // draw maze internals
-            int x = 2;
-            int y = 2;
-            for (int i = 0; i < maze.GetLength(0); i++)
+            
+            // about this trade off: we print walls first, breadcrumbs second.
+            // breadcrumps can be toggled on/ off, so those need to be detatchable anyway. 
+            // ****^^^^ this is the big breakthrough. 
+
+            // 2 sets of while loops. 
+            // maybe the first can incorporate drawing the character, too, since he is always drawn. 
+
+            // so, for the walls + character loops:
+
+            // who tracks the top-left printers coords, this function or the obj? 
+            // I think that code should go here. 
+
+            // who tracks which texture to show? 
+            // Here. 
+
+            // who tracks rectangle size? 
+            // Here. 
+
+            // I want the maze locatoin bool arrary to be encapsulated in an obj. WHy?
+            // so that when I have to do move checks, I can do something like
+            // Guy.move(left)
+            // move(direction)
+            //   check if desired direction is in the map; (track state to check this)
+            //      sdf
+            //   check if wall is in the way
+            //      m
+            //   if neither of these are bad, update guy object. 
+
+            // let the main character be a separate object that keeps track of his own corrds. 
+
+            // could be like this:
+            Maze mazey = new Maze(2);
+            int TileSizePx = m_MazeSizePx / mazey.n - 2; // subtract 2 to make space for walls
+
+            int x = 0;
+            int y = 0;
+            // horizontal walls
+            for (int i = 0; i < mazey.n; i++)
             {
-                x = 2;
-                y += i % 2 == 0 ? TileSizePx : 4;
-
-                for (int j = 0; j < maze.GetLength(0); j++)
+                for (int j = 0; j < mazey.n; j++)
                 {
-                    if (i % 2 == 0) // even rows (rows with breadcrumbs & walls)
+                    if (i%2 == 0) // case of even rows (vertical walls)
                     {
-                        
-                        
-                        if (j % 2 == 0) // even cells (columns for breadcrumbs)
-                        {
-                            // case where we consider drawing breadcrumbs
-
-                            if (maze[i, j].isVisited)
-                            //m_spriteBatch.Draw()
-                            {
-                                //m_spriteBatch.Draw(new Rectangle(x, y, TileSizePx, TileSizePx));
-                            }
-                            if (maze[i, j].isShortestPath)
-                            { }
-
-                            x += TileSizePx;
-
-                            
-                        }
-                        else // odd cells (columns for vertical walls)
-                        {
-                            if (maze[i, j].isWall) // case where this is a vertical wall section we are considering
-                            {
-                                m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx), Color.White);
-                            }
-
-                            x += 4;
-                        }
+                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx), Color.White);
+                        //update x,y
                     }
-                    else // odd rows ( horizontal walls only)
+                    else // case of odd rows (horizontal walls)
                     {
-                        if (j%2==0)
-                            if (maze[i, j].isWall) // case where this is a horizontal wall section we are considering
-                                m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx, m_MazeWallSizePx), Color.White);
-
-                        x += TileSizePx + 4;
+                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx, m_MazeWallSizePx), Color.White);
+                        //update x,y
                     }
+
+
                 }
             }
 
 
-            
+
+
 
             m_spriteBatch.End();
 

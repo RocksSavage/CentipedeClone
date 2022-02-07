@@ -20,6 +20,33 @@ namespace CS5410
             public bool isShortestPath { get; set; }
         }
 
+        class Maze
+        {
+            // later I can make these private after debugging. 
+            public bool[,] walls;
+            public bool[,] breadcrumbs;
+            public int n;
+            public Maze(int n)
+            {
+                // consider making this the new maze generator
+                this.n = n;
+                walls = new bool[n-1, n-1];
+                breadcrumbs = new bool[n, n];
+            }
+
+        }
+
+        // is this needed?
+        public class Guy
+        {
+            int x;
+            int y;
+            Guy()
+            {
+                x = 0;
+                y = 0;
+            }
+        }
         protected void ProcessInput(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -55,17 +82,17 @@ namespace CS5410
 
             return new TileState[3, 3]
             {
-                { new TileState(false,false,false),
+                { new TileState(true,false,false),
                     new TileState(true, false, false),
-                    new TileState(false, false, false)
+                    new TileState(true, false, false)
                 },
-                {  new TileState(false,false,false),
+                {  new TileState(true,false,false),
                  new TileState(true,false,false),
-                 new TileState(false,false,false)
+                 new TileState(true,false,false)
                 },
-                {  new TileState(false,false,false),
+                {  new TileState(true,false,false),
                  new TileState(true,false,false),
-                 new TileState(false,false,false)
+                 new TileState(true,false,false)
                 }
             };
         }
