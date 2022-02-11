@@ -1,6 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace CS5410
 {
@@ -22,16 +25,50 @@ namespace CS5410
 
         class Maze
         {
-            // later I can make these private after debugging. 
+            // later I can make these private after debugging.
             public bool[,] walls;
-            public bool[,] breadcrumbs;
+            public bool[,,] breadcrumbs;
             public int n;
             public Maze(int n)
             {
-                // consider making this the new maze generator
                 this.n = n;
-                walls = new bool[n-1, n-1];
-                breadcrumbs = new bool[n, n];
+                walls = new bool[2*n-1, 2*n-1];
+                breadcrumbs = new bool[n, n, 2];
+
+
+                // maze generation
+                var random = new Random();
+                var discovered = new List<(int, int)>();
+                var frontier = new List<(int, int)>();
+                (int x, int y) target = (random.Next(this.n), random.Next(this.n));
+
+                discovered.Add(target);
+                frontier.Union(getNeighbors(target));
+                
+                while (frontier.Count > 0)
+                {
+                    target = frontier[random.Next(frontier.Count)];
+                    // get neighbors of target in discovered and choose one randomly
+                    List<(int,int)> candidatesList = (List<(int, int)>)getNeighbors(target).Union(discovered);
+                    (int,int) targetee = candidatesList[ random.Next(candidatesList.Count()) ];
+                    // chagne this later??
+                    //getWallCoords(target, targetee);
+                }
+
+            }
+
+            List<(int,int)> getNeighbors((int, int) coords)
+            {
+                List<(int,int)> neighbors = new List<(int, int)>();
+                if (coords.Item1 - 1 >= 0)
+                    neighbors.Add((coords.Item1 - 1, coords.Item2));
+                if (coords.Item1 + 1 < this.n)
+                    neighbors.Add((coords.Item1+1,coords.Item2));
+                if (coords.Item2 - 1 >= 0)
+                    neighbors.Add((coords.Item1, coords.Item2 -1));
+                if (coords.Item2 + 1 < this.n)
+                    neighbors.Add((coords.Item1, coords.Item2 + 1));
+                return neighbors;
             }
 
         }

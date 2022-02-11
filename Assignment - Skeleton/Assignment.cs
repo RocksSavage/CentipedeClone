@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace CS5410
 {
@@ -10,6 +11,8 @@ namespace CS5410
         Texture2D m_BGTexture;
         Texture2D m_FootPrintTexture;
         Texture2D m_ShortestPathTexture;
+        SpriteFont m_font;
+        SpriteBatch spriteBatch;
         static int m_MazeSizePx = 500;
         static int m_MazeWallSizePx = 4;
 
@@ -31,7 +34,7 @@ namespace CS5410
 
             m_graphics.IsFullScreen = false;
             m_graphics.PreferredBackBufferWidth = m_MazeSizePx + 200; // tack on some space for timer, etc
-            m_graphics.PreferredBackBufferHeight = m_MazeSizePx;
+            m_graphics.PreferredBackBufferHeight = m_MazeSizePx*2;
             m_graphics.ApplyChanges();
 
             //DELETE LATER TRENT
@@ -47,6 +50,7 @@ namespace CS5410
             // TODO: use this.Content to load your game content here
             m_ballTexture = Content.Load<Texture2D>("ball");
             m_BGTexture = Content.Load<Texture2D>("black_grunge_bg");
+            //m_SpriteFont = this.Content.Load<SpriteFont>("Ariel");
         }
         
 
@@ -118,30 +122,36 @@ namespace CS5410
             // let the main character be a separate object that keeps track of his own corrds. 
 
             // could be like this:
-            Maze mazey = new Maze(2);
-            int TileSizePx = m_MazeSizePx / mazey.n - 2; // subtract 2 to make space for walls
+            Maze mazey = new Maze(5);
+            int TileSizePx = (m_MazeSizePx / mazey.n) - 4; // subtract 2 to make space for walls
 
-            int x = 0;
-            int y = 0;
-            // horizontal walls
-            for (int i = 0; i < mazey.n; i++)
+            int x = 2;
+            int y = 2;
+            
+            for (int i = 0; i < mazey.walls.GetLength(0); i++) // horizontal walls
             {
                 for (int j = 0; j < mazey.n; j++)
                 {
-                    if (i%2 == 0) // case of even rows (vertical walls)
+                    if (mazey.walls[i, j])
                     {
-                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx), Color.White);
-                        //update x,y
-                    }
-                    else // case of odd rows (horizontal walls)
-                    {
-                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx, m_MazeWallSizePx), Color.White);
-                        //update x,y
+                        if (i % 2 == 0) // case of even rows (vertical walls)
+                            m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx), Color.White);
+
+                        else // case of odd rows (horizontal walls)
+                            m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx + 4, m_MazeWallSizePx), Color.White);
                     }
 
-
+                    x += TileSizePx;
                 }
+                x = 2;
+                if (i % 2 == 0)
+                    y += TileSizePx;
+                else
+                    y += 4;
             }
+
+            x = 2;
+            y = 2;
 
 
 
