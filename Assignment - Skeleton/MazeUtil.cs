@@ -32,7 +32,7 @@ namespace CS5410
             public Maze(int n)
             {
                 this.n = n;
-                walls = new bool[2*n-1, 2*n-1];
+                walls = new bool[n, n];
                 breadcrumbs = new bool[n, n, 2];
 
 
@@ -54,7 +54,33 @@ namespace CS5410
                     // chagne this later??
                     //getWallCoords(target, targetee);
                 }
-
+            }
+            /// <summary>
+            /// gives the corrdinates for the wall location, given two
+            /// adjacent cells. Warning: no input checks!
+            /// 
+            /// </summary>
+            /// <returns></returns>
+            public (int,int) getWallCoords((int,int) A, (int,int) B)
+            {
+                if (A.Item1 == B.Item1) // case of same column
+                {
+                    int lateralDiff = (A.Item2 - B.Item2);
+                    if      (lateralDiff >0) // case where A is south of B
+                        return (B.Item1, B.Item2+1);
+                    else if (lateralDiff < 0)
+                        return (A.Item1, A.Item2+1);
+                }
+                else if (A.Item2 == B.Item2) // case of same row
+                {
+                    int lateralDiff = (A.Item1 - B.Item1);
+                    if      (lateralDiff > 0) // case where A is east of B
+                        return B;
+                    else if (lateralDiff < 0)
+                        return A;
+                }
+                // case of same cell. 
+                throw new ArgumentException("tiles must be distinct");
             }
 
             List<(int,int)> getNeighbors((int, int) coords)
@@ -71,7 +97,7 @@ namespace CS5410
                 return neighbors;
             }
 
-        }
+        } //end Maze
 
         // is this needed?
         public class Guy
