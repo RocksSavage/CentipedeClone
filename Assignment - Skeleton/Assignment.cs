@@ -128,11 +128,11 @@ namespace CS5410
             int x = 2;
             int y = 2;
             
-            for (int i = 0; i < mazey.walls.GetLength(0); i++) // horizontal walls
+            for (int i = 0; i < mazey.pathMap.GetLength(0); i++) // horizontal walls
             {
                 for (int j = 0; j < mazey.n; j++)
                 {
-                    if (mazey.walls[i, j])
+                    if (mazey.pathMap[i, j])
                     {
                         if (i % 2 == 0) // case of even rows (vertical walls)
                             m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx), Color.White);

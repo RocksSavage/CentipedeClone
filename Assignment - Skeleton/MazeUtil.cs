@@ -26,13 +26,13 @@ namespace CS5410
         class Maze
         {
             // later I can make these private after debugging.
-            public bool[,] walls;
+            public bool[,] pathMap;
             public bool[,,] breadcrumbs;
             public int n;
             public Maze(int n)
             {
                 this.n = n;
-                walls = new bool[n, n];
+                pathMap = new bool[n, n];
                 breadcrumbs = new bool[n, n, 2];
 
 
@@ -40,24 +40,33 @@ namespace CS5410
                 var random = new Random();
                 var discovered = new List<(int, int)>();
                 var frontier = new List<(int, int)>();
-                (int x, int y) target = (random.Next(this.n), random.Next(this.n));
+                (int x, int y) target = (random.Next(this.n-1), random.Next(this.n-1));
 
                 discovered.Add(target);
-                frontier.Union(getNeighbors(target));
-                
+                frontier = frontier.Union(getNeighbors(target)).ToList();
+
                 while (frontier.Count > 0)
                 {
                     target = frontier[random.Next(frontier.Count)];
                     // get neighbors of target in discovered and choose one randomly
-                    List<(int,int)> candidatesList = (List<(int, int)>)getNeighbors(target).Union(discovered);
+                    List<(int,int)> candidatesList = getNeighbors(target).Intersect(discovered).ToList();
                     (int,int) targetee = candidatesList[ random.Next(candidatesList.Count()) ];
-                    // chagne this later??
-                    //getWallCoords(target, targetee);
+                    
+                    // erase the wall between the randomly chosen discovered tile and the target
+                    (int, int) wallBetweenCoords = getWallCoords(target, targetee);
+                    pathMap[wallBetweenCoords.Item1, wallBetweenCoords.Item2] = true;
+
+                    // put the target into discovered set
+                    discovered.Add(target);
+                    frontier.Remove(target);
+
+                    // throw new neighbors into frontier
+                    frontier = frontier.Union(getNeighbors(target).Except(candidatesList)).ToList();
                 }
             }
             /// <summary>
             /// gives the corrdinates for the wall location, given two
-            /// adjacent cells. Warning: no input checks!
+            /// adjacent cells. Warning: no input checks! No saftey!
             /// 
             /// </summary>
             /// <returns></returns>
@@ -83,6 +92,14 @@ namespace CS5410
                 throw new ArgumentException("tiles must be distinct");
             }
 
+            /// <summary>
+            /// Returns list of ordered pair cordinates
+            /// that are neighbors to the target coordinates passed in. 
+            /// Checks are made to ensure tiles off-the-map aren't
+            /// included. 
+            /// </summary>
+            /// <param name="coords"></param>
+            /// <returns></returns>
             List<(int,int)> getNeighbors((int, int) coords)
             {
                 List<(int,int)> neighbors = new List<(int, int)>();
