@@ -64,7 +64,8 @@ namespace CS5410
             var frontier = new List<(int,int)>();
 
             // "Randomly pick a cell, add it to the maze"
-            (int, int) target = (random.Next(n - 1), random.Next(n - 1));
+            //(int, int) target = (random.Next(n - 1), random.Next(n - 1));
+            (int, int) target = (0, 0);
             discovered.Add(target);
 
             // "Add its neighboring cells to the frontier"
@@ -81,19 +82,19 @@ namespace CS5410
 
                 // "Remove that wall"
                 // establish path between the randomly chosen discovered tile and the target
-                if (target.Item1 == targetee.Item1) // case of same column
+                if      (target.Item1 == targetee.Item1) // case of same column
                 {
-                    if (target.Item2 > targetee.Item2) // case where A is south of B
-                        maze[targetee.Item1, targetee.Item2].south = true;
-                    else
-                        maze[target.Item1, target.Item2].south = true;
+                        if (target.Item2 > targetee.Item2) // case where A is south of B
+                                maze[targetee.Item1, targetee.Item2].south = true;
+                        else
+                                maze[target.Item1, target.Item2].south = true;
                 }
                 else if (target.Item2 == targetee.Item2) // case of same row
                 {
-                    if (target.Item1 > targetee.Item1) // case where A is east of B
-                        maze[targetee.Item1, targetee.Item2].east = true;
-                    else
-                        maze[target.Item1, target.Item2].east = true;
+                        if (target.Item1 > targetee.Item1) // case where A is east of B
+                                maze[targetee.Item1, targetee.Item2].east = true;
+                        else
+                                maze[target.Item1, target.Item2].east = true;
 
                 }
                 else

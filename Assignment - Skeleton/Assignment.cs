@@ -34,7 +34,7 @@ namespace CS5410
             m_graphics.PreferredBackBufferHeight = m_MazeSizePx;
             m_graphics.ApplyChanges();
 
-            m_maze = generateRandomMaze(3);
+            m_maze = generateRandomMaze(25);
 
             base.Initialize();
         }
@@ -46,6 +46,7 @@ namespace CS5410
             // TODO: use this.Content to load your game content here
             m_ballTexture = Content.Load<Texture2D>("ball");
             m_BGTexture = Content.Load<Texture2D>("black_grunge_bg");
+            m_ShortestPathTexture = Content.Load<Texture2D>("");
         }
         
 
@@ -55,8 +56,6 @@ namespace CS5410
 
             // TODO: Add your update logic here
             ProcessInput(gameTime);
-
-            //maze = generateRandomMaze(2);
 
             base.Update(gameTime);
         }
@@ -77,9 +76,9 @@ namespace CS5410
 
             m_spriteBatch.Draw(_texture, new Rectangle(0, 0, m_MazeWallSizePx, m_MazeSizePx), Color.White);
             m_spriteBatch.Draw(_texture, new Rectangle(0, 0, m_MazeSizePx, m_MazeWallSizePx), Color.White);
-            
-            m_spriteBatch.Draw(_texture, new Rectangle(0, m_MazeSizePx - 5, m_MazeSizePx, m_MazeWallSizePx), Color.White);
-            m_spriteBatch.Draw(_texture, new Rectangle(m_MazeSizePx - 5, 0, m_MazeWallSizePx, m_MazeSizePx), Color.White);
+
+            //m_spriteBatch.Draw(_texture, new Rectangle(0, m_MazeSizePx - 5, m_MazeSizePx, m_MazeWallSizePx), Color.White);
+            //m_spriteBatch.Draw(_texture, new Rectangle(m_MazeSizePx - 5, 0, m_MazeWallSizePx, m_MazeSizePx), Color.White);
 
             // calc sizes
             int n = m_maze.GetLength(0);
@@ -89,16 +88,26 @@ namespace CS5410
             // draw maze internals
 
             // 'floor' walls
-            for (int x = 2; x < TileSizePx*n; x=x+TileSizePx)
-                for (int y = TileSizePx + 2; y < TileSizePx*n; y=y+TileSizePx)
-                    if (m_maze[((x-2)/TileSizePx),((y-2)/TileSizePx)].south)
-                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx +4, m_MazeWallSizePx), Color.White);
+            //for (int x = 2; x < TileSizePx*n; x=x+TileSizePx)
+            //    for (int y = TileSizePx + 2; y < TileSizePx*n; y=y+TileSizePx)
+            //        if (!m_maze[((x-2)/TileSizePx),((y / TileSizePx) - 1)].south)
+            //            m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx+4, m_MazeWallSizePx), Color.White);
+            
+            for (int x = 0; x < n; x++)
+                for (int y = 0; y < n; y++)
+                    if (!m_maze[x,y].south)
+                        m_spriteBatch.Draw(_texture, new Rectangle(x*TileSizePx+2, TileSizePx + y*TileSizePx+2, TileSizePx + 4, m_MazeWallSizePx), Color.White);
 
-            for (int x = TileSizePx + 2; x < TileSizePx * n; x = x + TileSizePx)
-                for (int y = 2; y < TileSizePx * n; y = y + TileSizePx)
-                    if (m_maze[((x - 2) / TileSizePx), ((y - 2) / TileSizePx)].east)
-                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx + 4), Color.White);
-
+            // 'side' walls
+            //for (int x = TileSizePx + 2; x < TileSizePx * n; x = x + TileSizePx)
+            //    for (int y = 2; y < TileSizePx * n; y = y + TileSizePx)
+            //        if (!m_maze[((x - 2) / TileSizePx), ((y - 2) / TileSizePx)].east)
+            //            m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx + 4), Color.White);
+            
+            for (int x = 0; x < n; x++)
+                for (int y = 0; y < n; y++)
+                    if (!m_maze[x,y].east)
+                        m_spriteBatch.Draw(_texture, new Rectangle(TileSizePx + x*TileSizePx+2, y*TileSizePx+2, m_MazeWallSizePx, TileSizePx + 4), Color.White);
 
             m_spriteBatch.End();
 
