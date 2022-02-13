@@ -14,7 +14,7 @@ namespace CS5410
         static int m_MazeWallSizePx = 4;
 
 
-        private TileState[,] maze;
+        private TileState[,] m_maze;
 
         private GraphicsDeviceManager m_graphics;
         private SpriteBatch m_spriteBatch;
@@ -34,8 +34,7 @@ namespace CS5410
             m_graphics.PreferredBackBufferHeight = m_MazeSizePx;
             m_graphics.ApplyChanges();
 
-            //DELETE LATER TRENT
-            maze = generateRandomMaze(2);
+            m_maze = generateRandomMaze(5);
 
             base.Initialize();
         }
@@ -83,62 +82,25 @@ namespace CS5410
             m_spriteBatch.Draw(_texture, new Rectangle(m_MazeSizePx - 5, 0, m_MazeWallSizePx, m_MazeSizePx), Color.White);
 
             // calc sizes
-            int n = (maze.GetLength(0) + 1) / 2;
-            int TileSizePx = m_MazeSizePx / n - 2; // subtract 2 to make space for walls
+            int n = m_maze.GetLength(0);
+            int TileSizePx =(m_MazeSizePx / n) - 2; // subtract 2 to make space for walls
+
 
             // draw maze internals
-            int x = 2;
-            int y = 2;
-            for (int i = 0; i < maze.GetLength(0); i++)
-            {
-                x = 2;
-                y += i % 2 == 0 ? TileSizePx : 4;
 
-                for (int j = 0; j < maze.GetLength(0); j++)
+            // 'floor' walls
+            for (int x = 2; x < TileSizePx*n; x=x+TileSizePx)
+                for (int y = TileSizePx + 2; y < TileSizePx*n; y=y+TileSizePx)
                 {
-                    if (i % 2 == 0) // even rows (rows with breadcrumbs & walls)
-                    {
-                        
-                        
-                        if (j % 2 == 0) // even cells (columns for breadcrumbs)
-                        {
-                            // case where we consider drawing breadcrumbs
-
-                            if (maze[i, j].isVisited)
-                            //m_spriteBatch.Draw()
-                            {
-                                //m_spriteBatch.Draw(new Rectangle(x, y, TileSizePx, TileSizePx));
-                            }
-                            if (maze[i, j].isShortestPath)
-                            { }
-
-                            x += TileSizePx;
-
-                            
-                        }
-                        else // odd cells (columns for vertical walls)
-                        {
-                            if (maze[i, j].isWall) // case where this is a vertical wall section we are considering
-                            {
-                                m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx), Color.White);
-                            }
-
-                            x += 4;
-                        }
-                    }
-                    else // odd rows ( horizontal walls only)
-                    {
-                        if (j%2==0)
-                            if (maze[i, j].isWall) // case where this is a horizontal wall section we are considering
-                                m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx, m_MazeWallSizePx), Color.White);
-
-                        x += TileSizePx + 4;
-                    }
+                    m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx +4, m_MazeWallSizePx), Color.White);
                 }
-            }
 
+            for (int x = TileSizePx + 2; x < TileSizePx * n; x = x + TileSizePx)
+                for (int y = 2; y < TileSizePx * n; y = y + TileSizePx)
+                {
+                    m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx + 4), Color.White);
+                }
 
-            
 
             m_spriteBatch.End();
 

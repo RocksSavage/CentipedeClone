@@ -1,23 +1,19 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Linq;
 
 namespace CS5410
 {
     public partial class Assignment : Game
     {
-
         public struct TileState
         {
-            public TileState(bool isWall, bool isVisited, bool isShortestPath)
-            {
-                this.isWall = isWall;
-                this.isVisited = isVisited;
-                this.isShortestPath = isShortestPath;
-            }
-            public bool isWall { get; set; }
+            
             public bool isVisited { get; set; }
             public bool isShortestPath { get; set; }
+            public bool south { get; set; }
+            public bool east { get; set; }
         }
 
         protected void ProcessInput(GameTime gameTime)
@@ -48,26 +44,24 @@ namespace CS5410
             //Dean said he might do this later?
         }
 
+        /// <summary>
+        /// Returns top-left node of maze. 
+        /// </summary>
+        /// <param name="size">the length the maze can be along each side</param>
+        /// <returns></returns>
         private TileState[,] generateRandomMaze(int size)
         {
             // demo: make a simple 2x2 maze with one wall in it. 
-            TileState bob = new TileState(true, true, true);
 
-            return new TileState[3, 3]
-            {
-                { new TileState(false,false,false),
-                    new TileState(true, false, false),
-                    new TileState(false, false, false)
-                },
-                {  new TileState(false,false,false),
-                 new TileState(true,false,false),
-                 new TileState(false,false,false)
-                },
-                {  new TileState(false,false,false),
-                 new TileState(true,false,false),
-                 new TileState(false,false,false)
-                }
-            };
+            TileState[,] maze = new TileState[size, size];
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                    maze[i, j] = new TileState();
+
+            //  Prim's algorithm
+
+
+            return maze;
         }
     }
 }
