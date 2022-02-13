@@ -52,6 +52,7 @@ namespace CS5410
         /// <returns></returns>
         private TileState[,] generateRandomMaze(int n)
         {
+            // "Create a graph of cells"
             TileState[,] maze = new TileState[n, n];
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
@@ -62,33 +63,51 @@ namespace CS5410
             var discovered = new List<(int,int)>();
             var frontier = new List<(int,int)>();
 
+            // "Randomly pick a cell, add it to the maze"
             (int, int) target = (random.Next(n - 1), random.Next(n - 1));
-
             discovered.Add(target);
-            frontier = frontier.Union(getNeighbors(target, n)).ToList();
+
+            // "Add its neighboring cells to the frontier"
+            frontier = getNeighbors(target, n);
 
             while (frontier.Count > 0)
             {
+                // "Randomly choose a cell in the frontier and (randomly) pick a wall that connects to
+                //  a cell in the maze"
                 target = frontier[random.Next(frontier.Count)];
                 // get neighbors of target in discovered and choose one randomly
                 List<(int, int)> candidatesList = getNeighbors(target,n).Intersect(discovered).ToList();
                 (int, int) targetee = candidatesList[random.Next(candidatesList.Count())];
 
-                // erase the wall between the randomly chosen discovered tile and the target
-                //(int, int) wallBetweenCoords = getWallCoords(target, targetee);
-
-                //pathMap[wallBetweenCoords.Item1, wallBetweenCoords.Item2] = true;
-
+                // "Remove that wall"
                 // establish path between the randomly chosen discovered tile and the target
-                
+                if (target.Item1 == targetee.Item1) // case of same column
+                {
+                    if (target.Item2 > targetee.Item2) // case where A is south of B
+                        maze[targetee.Item1, targetee.Item2].south = true;
+                    else
+                        maze[target.Item1, target.Item2].south = true;
+                }
+                else if (target.Item2 == targetee.Item2) // case of same row
+                {
+                    if (target.Item1 > targetee.Item1) // case where A is east of B
+                        maze[targetee.Item1, targetee.Item2].east = true;
+                    else
+                        maze[target.Item1, target.Item2].east = true;
 
+                }
+                else
+                    throw new ArgumentException("Target and targetee are the same");
+
+                // "Add that cell to the maze"
                 // put the target into discovered set
                 discovered.Add(target);
                 frontier.Remove(target);
 
+                // "Update the frontier"
                 // throw new neighbors into frontier
                 frontier = frontier.Union(getNeighbors(target,n).Except(candidatesList)).ToList();
-            }
+            } // "Repeat Step 3 until no more cells in the frontier"
 
             return maze;
         }
@@ -104,6 +123,27 @@ namespace CS5410
             if (target.Item2 + 1 < n)
                 neighbors.Add((target.Item1, target.Item2 + 1));
             return neighbors;
+        }
+        public (int, int) getWallCoords((int, int) target, (int, int) targetee)
+        {
+            if (target.Item1 == targetee.Item1) // case of same column
+            {
+                int lateralDiff = (target.Item2 - targetee.Item2);
+                if (lateralDiff > 0) // case where A is south of B
+                    return (target.Item1, target.Item2 * 2 + 1);
+                else if (lateralDiff < 0)
+                    return (targetee.Item1, targetee.Item2 * 2 + 1);
+            }
+            else if (target.Item2 == targetee.Item2) // case of same row
+            {
+                int lateralDiff = (target.Item1 - targetee.Item1);
+                if (lateralDiff > 0) // case where A is east of B
+                    return targetee;
+                else if (lateralDiff < 0)
+                    return target;
+            }
+            // case of same cell. 
+            throw new ArgumentException("tiles must be distinct");
         }
     }
 }

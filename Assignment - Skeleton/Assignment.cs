@@ -34,7 +34,7 @@ namespace CS5410
             m_graphics.PreferredBackBufferHeight = m_MazeSizePx;
             m_graphics.ApplyChanges();
 
-            m_maze = generateRandomMaze(5);
+            m_maze = generateRandomMaze(3);
 
             base.Initialize();
         }
@@ -91,15 +91,13 @@ namespace CS5410
             // 'floor' walls
             for (int x = 2; x < TileSizePx*n; x=x+TileSizePx)
                 for (int y = TileSizePx + 2; y < TileSizePx*n; y=y+TileSizePx)
-                {
-                    m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx +4, m_MazeWallSizePx), Color.White);
-                }
+                    if (m_maze[((x-2)/TileSizePx),((y-2)/TileSizePx)].south)
+                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, TileSizePx +4, m_MazeWallSizePx), Color.White);
 
             for (int x = TileSizePx + 2; x < TileSizePx * n; x = x + TileSizePx)
                 for (int y = 2; y < TileSizePx * n; y = y + TileSizePx)
-                {
-                    m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx + 4), Color.White);
-                }
+                    if (m_maze[((x - 2) / TileSizePx), ((y - 2) / TileSizePx)].east)
+                        m_spriteBatch.Draw(_texture, new Rectangle(x, y, m_MazeWallSizePx, TileSizePx + 4), Color.White);
 
 
             m_spriteBatch.End();
