@@ -15,6 +15,9 @@ namespace CS5410
 
     public enum ControllerStateEnum
     {
+        None, // I added this property to overcome bug,
+              // preventing the "enter" keystroke dropping
+              // us into the Settings View from being caught
         MoveLeft,
         MoveRight,
         MoveDown,

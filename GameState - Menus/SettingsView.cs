@@ -13,9 +13,8 @@ namespace CS5410
         private SpriteFont m_fontMenu;
         private SpriteFont m_fontMenuSelect;
 
-        private ControllerStateEnum m_currentSelection = ControllerStateEnum.MoveLeft;
+        private ControllerStateEnum m_currentSelection = ControllerStateEnum.None;
         private bool m_waitForKeyRelease = false;
-        //private bool m_awaitingInput = false;
 
         public override void loadContent(ContentManager contentManager)
         {
@@ -34,6 +33,7 @@ namespace CS5410
             if (!m_waitForKeyRelease)
             {
                 // check and fill any outstanding key assignments
+
                 // if check is true and key assignment filled, skip the rest of this... 
                 //return GameStateEnum.Settings
 
@@ -81,7 +81,7 @@ namespace CS5410
             return GameStateEnum.Settings;
         }
 
-        
+
 
 
         public override void render(GameTime gameTime)
@@ -102,26 +102,32 @@ namespace CS5410
 
             // I split the first one's parameters on separate lines to help you see them better
             float bottom = drawMenuItem(
-                m_currentSelection == ControllerStateEnum.MoveLeft ? m_fontMenuSelect : m_fontMenu,
+                ControllerStateEnum.MoveLeft,
+                ControllerState.MoveLeft,
                 "Move Left:",
-                ControllerState.MoveLeft.ToString(),
-                m_graphics.PreferredBackBufferHeight / 3, /// 50 is arbitrary, for looks.
-                m_currentSelection == ControllerStateEnum.MoveLeft ? Color.Yellow : Color.Blue
+                m_graphics.PreferredBackBufferHeight / 3
                 );
-            bottom = drawMenuItem(m_currentSelection == ControllerStateEnum.MoveRight? m_fontMenuSelect : m_fontMenu, "Move Right:", ControllerState.MoveRight.ToString(), bottom, m_currentSelection == ControllerStateEnum.MoveRight ? Color.Yellow : Color.Blue);
-            bottom = drawMenuItem(m_currentSelection == ControllerStateEnum.MoveDown ? m_fontMenuSelect : m_fontMenu, "Move Down:", ControllerState.MoveDown.ToString(), bottom, m_currentSelection == ControllerStateEnum.MoveDown ? Color.Yellow : Color.Blue);
-            bottom = drawMenuItem(m_currentSelection == ControllerStateEnum.MoveUp ? m_fontMenuSelect : m_fontMenu, "Move Up:", ControllerState.MoveDown.ToString(), bottom, m_currentSelection == ControllerStateEnum.MoveUp ? Color.Yellow : Color.Blue);
-                     drawMenuItem(m_currentSelection == ControllerStateEnum.Fire ? m_fontMenuSelect : m_fontMenu, "To Fire:", ControllerState.MoveUp.ToString(), bottom, m_currentSelection == ControllerStateEnum.Fire ? Color.Yellow : Color.Blue);
+            bottom = drawMenuItem(ControllerStateEnum.MoveRight, ControllerState.MoveRight, "Move Right:", bottom);
+            bottom = drawMenuItem(ControllerStateEnum.MoveDown, ControllerState.MoveDown, "Move Down:", bottom);
+            bottom = drawMenuItem(ControllerStateEnum.MoveUp, ControllerState.MoveUp, "Move Up:", bottom);
+            drawMenuItem(ControllerStateEnum.Fire, ControllerState.Fire, "To Fire:", bottom);
 
             m_spriteBatch.End();
         }
 
-        private float drawMenuItem(SpriteFont font, string text, string buttonText, float y, Color color)
+        private float drawMenuItem(ControllerStateEnum moveState, Keys keyState, string text, float y)
         {
+            SpriteFont font = m_currentSelection == moveState ? m_fontMenuSelect : m_fontMenu;
+            Color color = m_currentSelection == moveState ? Color.Yellow : Color.Blue;
             Vector2 stringSize = font.MeasureString(text);
+            
+            string text2 = keyState == Keys.None ? BTPROMPT : keyState.ToString();
+            if (keyState == Keys.Left || keyState == Keys.Right || keyState == Keys.Up || keyState == Keys.Down)
+                text2 += " Arrow";
+
             m_spriteBatch.DrawString(
                 font,
-                text+" "+buttonText,
+                text + " " + text2,
                 new Vector2(m_graphics.PreferredBackBufferWidth / 2 - stringSize.X, y),
                 color);
 
