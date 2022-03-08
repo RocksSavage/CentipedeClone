@@ -32,7 +32,7 @@ namespace CS5410
             if (!m_waitForKeyRelease)
             {
                 // check and fill any outstanding key assignments
-                Keys[] pkeys = Keyboard.GetState().GetPressedKeys();
+                Keys[] pkeys = Keyboard.GetState().GetPressedKeys(); /// bug here, could fix by doing a delta list. see GetPRessedKeys(Keys[] array)
                 if (ControllerState.MoveLeft == Keys.None && pkeys.Length > 0)
                 {
                     ControllerState.MoveLeft = pkeys[0];
