@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 namespace CS5410
 {
-    public class GameStateDemo : Game
+    public class GameStateMaster : Game
     {
         private GraphicsDeviceManager m_graphics;
         private IGameState m_currentState;
         private GameStateEnum m_nextStateEnum = GameStateEnum.MainMenu;
         private Dictionary<GameStateEnum, IGameState> m_states;
 
-        public GameStateDemo()
+        public GameStateMaster()
         {
             m_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
@@ -30,7 +30,7 @@ namespace CS5410
             m_states.Add(GameStateEnum.MainMenu, new MainMenuView());
             m_states.Add(GameStateEnum.GamePlay, new GamePlayView());
             m_states.Add(GameStateEnum.HighScores, new HighScoresView());
-            m_states.Add(GameStateEnum.Help, new HelpView());
+            m_states.Add(GameStateEnum.Settings, new SettingsView());
             m_states.Add(GameStateEnum.About, new AboutView());
 
             // We are starting with the main menu
