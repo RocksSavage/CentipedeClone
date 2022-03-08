@@ -20,7 +20,6 @@ namespace CS5410
         {
             m_fontMenu = contentManager.Load<SpriteFont>("Fonts/menu");
             m_fontMenuSelect = contentManager.Load<SpriteFont>("Fonts/menu-select");
-
         }
 
         public override GameStateEnum processInput(GameTime gameTime)
@@ -33,9 +32,32 @@ namespace CS5410
             if (!m_waitForKeyRelease)
             {
                 // check and fill any outstanding key assignments
-
-                // if check is true and key assignment filled, skip the rest of this... 
-                //return GameStateEnum.Settings
+                Keys[] pkeys = Keyboard.GetState().GetPressedKeys();
+                if (ControllerState.MoveLeft == Keys.None && pkeys.Length > 0)
+                {
+                    ControllerState.MoveLeft = pkeys[0];
+                    return GameStateEnum.Settings;
+                }
+                if (ControllerState.MoveRight == Keys.None && pkeys.Length > 0)
+                {
+                    ControllerState.MoveRight = pkeys[0];
+                    return GameStateEnum.Settings;
+                }
+                if (ControllerState.MoveDown == Keys.None && pkeys.Length > 0)
+                {
+                    ControllerState.MoveDown = pkeys[0];
+                    return GameStateEnum.Settings;
+                }
+                if (ControllerState.MoveUp == Keys.None && pkeys.Length > 0)
+                {
+                    ControllerState.MoveUp = pkeys[0];
+                    return GameStateEnum.Settings;
+                }
+                if (ControllerState.Fire == Keys.None && pkeys.Length > 0)
+                {
+                    ControllerState.Fire = pkeys[0];
+                    return GameStateEnum.Settings;
+                }
 
 
                 // Arrow keys to navigate the menu
