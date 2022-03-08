@@ -7,13 +7,15 @@ namespace CS5410
 {
     public class SettingsView : GameStateView
     {
-        private const string MESSAGE = "Settings (Customize Your Controls)";
+        private const string MESSAGE = "Settings (Press Enter to customize your controls)";
+        private const string BTPROMPT = "<<Press Desired Button>>";
 
         private SpriteFont m_fontMenu;
         private SpriteFont m_fontMenuSelect;
 
-        private ControllerState m_currentSelection = ControllerState.MoveLeft;
+        private ControllerStateEnum m_currentSelection = ControllerStateEnum.MoveLeft;
         private bool m_waitForKeyRelease = false;
+        //private bool m_awaitingInput = false;
 
         public override void loadContent(ContentManager contentManager)
         {
@@ -31,39 +33,45 @@ namespace CS5410
             // This is the technique I'm using to ensure one keypress makes one menu navigation move
             if (!m_waitForKeyRelease)
             {
+                // check and fill any outstanding key assignments
+                // if check is true and key assignment filled, skip the rest of this... 
+                //return GameStateEnum.Settings
+
+
                 // Arrow keys to navigate the menu
-                if (Keyboard.GetState().IsKeyDown(Keys.Down) && m_currentSelection != ControllerState.Fire)
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) && m_currentSelection != ControllerStateEnum.Fire)
                 {
                     m_currentSelection = m_currentSelection + 1;
                     m_waitForKeyRelease = true;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up) && m_currentSelection != ControllerState.MoveLeft)
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) && m_currentSelection != ControllerStateEnum.MoveLeft)
                 {
                     m_currentSelection = m_currentSelection - 1;
                     m_waitForKeyRelease = true;
                 }
 
-                // If enter is pressed, return the appropriate new state
-                //if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerState.NewGame)
-                //{
-                //    return GameStateEnum.GamePlay;
-                //}
-                //if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerState.HighScores)
-                //{
-                //    return GameStateEnum.HighScores;
-                //}
-                //if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerState.Settings)
-                //{
-                //    return GameStateEnum.Settings;
-                //}
-                //if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerState.About)
-                //{
-                //    return GameStateEnum.About;
-                //}
-                //if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerState.Quit)
-                //{
-                //    return GameStateEnum.Exit;
-                //}
+
+                // If enter is pressed, mark that state as needing a new key
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerStateEnum.MoveLeft)
+                {
+                    ControllerState.MoveLeft = Keys.None;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerStateEnum.MoveRight)
+                {
+                    ControllerState.MoveRight = Keys.None;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerStateEnum.MoveDown)
+                {
+                    ControllerState.MoveDown = Keys.None;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerStateEnum.MoveUp)
+                {
+                    ControllerState.MoveUp = Keys.None;
+                }
+                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == ControllerStateEnum.Fire)
+                {
+                    ControllerState.Fire = Keys.None;
+                }
             }
             else if (Keyboard.GetState().IsKeyUp(Keys.Down) && Keyboard.GetState().IsKeyUp(Keys.Up))
             {
@@ -94,27 +102,27 @@ namespace CS5410
 
             // I split the first one's parameters on separate lines to help you see them better
             float bottom = drawMenuItem(
-                m_currentSelection == ControllerState.MoveLeft ? m_fontMenuSelect : m_fontMenu,
-                "Move Left: ",
-                m_graphics.PreferredBackBufferHeight / 3 + 50, /// 50 is arbitrary, for looks.
-                m_currentSelection == ControllerState.MoveLeft ? Color.Yellow : Color.Blue
+                m_currentSelection == ControllerStateEnum.MoveLeft ? m_fontMenuSelect : m_fontMenu,
+                "Move Left:",
+                ControllerState.MoveLeft.ToString(),
+                m_graphics.PreferredBackBufferHeight / 3, /// 50 is arbitrary, for looks.
+                m_currentSelection == ControllerStateEnum.MoveLeft ? Color.Yellow : Color.Blue
                 );
-            bottom = drawMenuItem(m_currentSelection == ControllerState.MoveRight? m_fontMenuSelect : m_fontMenu, $"Move Right: {3+3}", bottom, m_currentSelection == ControllerState.MoveRight ? Color.Yellow : Color.Blue);
-            bottom = drawMenuItem(m_currentSelection == ControllerState.MoveDown ? m_fontMenuSelect : m_fontMenu, "Move Down: ", bottom, m_currentSelection == ControllerState.MoveDown ? Color.Yellow : Color.Blue);
-            bottom = drawMenuItem(m_currentSelection == ControllerState.MoveUp ? m_fontMenuSelect : m_fontMenu, "Move Up: ", bottom, m_currentSelection == ControllerState.MoveUp ? Color.Yellow : Color.Blue);
-                     drawMenuItem(m_currentSelection == ControllerState.Fire ? m_fontMenuSelect : m_fontMenu, "To Fire: ", bottom, m_currentSelection == ControllerState.Fire ? Color.Yellow : Color.Blue);
-
+            bottom = drawMenuItem(m_currentSelection == ControllerStateEnum.MoveRight? m_fontMenuSelect : m_fontMenu, "Move Right:", ControllerState.MoveRight.ToString(), bottom, m_currentSelection == ControllerStateEnum.MoveRight ? Color.Yellow : Color.Blue);
+            bottom = drawMenuItem(m_currentSelection == ControllerStateEnum.MoveDown ? m_fontMenuSelect : m_fontMenu, "Move Down:", ControllerState.MoveDown.ToString(), bottom, m_currentSelection == ControllerStateEnum.MoveDown ? Color.Yellow : Color.Blue);
+            bottom = drawMenuItem(m_currentSelection == ControllerStateEnum.MoveUp ? m_fontMenuSelect : m_fontMenu, "Move Up:", ControllerState.MoveDown.ToString(), bottom, m_currentSelection == ControllerStateEnum.MoveUp ? Color.Yellow : Color.Blue);
+                     drawMenuItem(m_currentSelection == ControllerStateEnum.Fire ? m_fontMenuSelect : m_fontMenu, "To Fire:", ControllerState.MoveUp.ToString(), bottom, m_currentSelection == ControllerStateEnum.Fire ? Color.Yellow : Color.Blue);
 
             m_spriteBatch.End();
         }
 
-        private float drawMenuItem(SpriteFont font, string text, float y, Color color)
+        private float drawMenuItem(SpriteFont font, string text, string buttonText, float y, Color color)
         {
             Vector2 stringSize = font.MeasureString(text);
             m_spriteBatch.DrawString(
                 font,
-                text,
-                new Vector2(m_graphics.PreferredBackBufferWidth / 2 - stringSize.X / 2, y),
+                text+" "+buttonText,
+                new Vector2(m_graphics.PreferredBackBufferWidth / 2 - stringSize.X, y),
                 color);
 
             return y + stringSize.Y;
