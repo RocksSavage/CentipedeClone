@@ -9,4 +9,13 @@
         About,
         Exit
     }
+
+    public enum ControllerState
+    {
+        MoveLeft,
+        MoveRight,
+        MoveDown,
+        MoveUp,
+        Fire
+    }
 }

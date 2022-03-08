@@ -12,15 +12,6 @@ namespace CS5410
         private SpriteFont m_fontMenu;
         private SpriteFont m_fontMenuSelect;
 
-        private enum ControllerState
-        {
-            MoveLeft,
-            MoveRight,
-            MoveUp,
-            MoveDown,
-            Fire
-        }
-
         private ControllerState m_currentSelection = ControllerState.MoveLeft;
         private bool m_waitForKeyRelease = false;
 
@@ -41,12 +32,12 @@ namespace CS5410
             if (!m_waitForKeyRelease)
             {
                 // Arrow keys to navigate the menu
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                if (Keyboard.GetState().IsKeyDown(Keys.Down) && m_currentSelection != ControllerState.Fire)
                 {
                     m_currentSelection = m_currentSelection + 1;
                     m_waitForKeyRelease = true;
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                if (Keyboard.GetState().IsKeyDown(Keys.Up) && m_currentSelection != ControllerState.MoveLeft)
                 {
                     m_currentSelection = m_currentSelection - 1;
                     m_waitForKeyRelease = true;
@@ -90,21 +81,28 @@ namespace CS5410
             m_spriteBatch.Begin();
 
             Vector2 stringSize = m_fontMenu.MeasureString(MESSAGE);
-            m_spriteBatch.DrawString(m_fontMenu, MESSAGE,
-                new Vector2(m_graphics.PreferredBackBufferWidth / 2 - stringSize.X / 2, m_graphics.PreferredBackBufferHeight / 2 - stringSize.Y), Color.Yellow);
+            m_spriteBatch.DrawString(
+                m_fontMenu,
+                MESSAGE,
+                new Vector2(
+                    m_graphics.PreferredBackBufferWidth / 2 - stringSize.X / 2,
+                    m_graphics.PreferredBackBufferHeight / 3 - stringSize.Y
+                    ),
+                Color.Blue
+                );
 
 
             // I split the first one's parameters on separate lines to help you see them better
             float bottom = drawMenuItem(
                 m_currentSelection == ControllerState.MoveLeft ? m_fontMenuSelect : m_fontMenu,
                 "Move Left: ",
-                200,
+                m_graphics.PreferredBackBufferHeight / 3 + 50, /// 50 is arbitrary, for looks.
                 m_currentSelection == ControllerState.MoveLeft ? Color.Yellow : Color.Blue
                 );
-            bottom = drawMenuItem(m_currentSelection == ControllerState.MoveRight? m_fontMenuSelect : m_fontMenu, "Move Right: ", bottom, m_currentSelection == ControllerState.MoveRight ? Color.Yellow : Color.Blue);
+            bottom = drawMenuItem(m_currentSelection == ControllerState.MoveRight? m_fontMenuSelect : m_fontMenu, $"Move Right: {3+3}", bottom, m_currentSelection == ControllerState.MoveRight ? Color.Yellow : Color.Blue);
             bottom = drawMenuItem(m_currentSelection == ControllerState.MoveDown ? m_fontMenuSelect : m_fontMenu, "Move Down: ", bottom, m_currentSelection == ControllerState.MoveDown ? Color.Yellow : Color.Blue);
             bottom = drawMenuItem(m_currentSelection == ControllerState.MoveUp ? m_fontMenuSelect : m_fontMenu, "Move Up: ", bottom, m_currentSelection == ControllerState.MoveUp ? Color.Yellow : Color.Blue);
-            drawMenuItem(m_currentSelection == ControllerState.Fire ? m_fontMenuSelect : m_fontMenu, "To Fire: ", bottom, m_currentSelection == ControllerState.MoveDown ? Color.Yellow : Color.Blue);
+                     drawMenuItem(m_currentSelection == ControllerState.Fire ? m_fontMenuSelect : m_fontMenu, "To Fire: ", bottom, m_currentSelection == ControllerState.Fire ? Color.Yellow : Color.Blue);
 
 
             m_spriteBatch.End();
