@@ -24,6 +24,13 @@ namespace CS5410.Objects
             get { return m_center; }
         }
 
+        public bool collide(AnimatedSprite other)
+        {
+            // TODO
+
+            return false;
+        }
+
         public float Rotation
         {
             get { return m_rotation; }
