@@ -9,8 +9,9 @@ namespace CS5410
 {
     public class GamePlayView : GameStateView
     {
+        bool m_gmover = false;
         private SpriteFont m_font;
-        private const string MESSAGE = "Isn't this game fun!";
+        private const string GMOVER = "GAME OVER";
 
         List<Objects.Shrooms> m_shroomsList = new List<Objects.Shrooms>();
         private AnimatedSprite m_shroomAnimator;
@@ -29,7 +30,7 @@ namespace CS5410
                 );
 
             m_shroomAnimator = new AnimatedSprite(
-                contentManager.Load<Texture2D>("Images/spritesheet-bird"),
+                contentManager.Load<Texture2D>("spritesheet-general"),
                 new int[] { 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40 }
             );
 
@@ -52,10 +53,23 @@ namespace CS5410
         {
             m_spriteBatch.Begin();
 
-            Vector2 stringSize = m_font.MeasureString(MESSAGE);
-            m_spriteBatch.DrawString(m_font, MESSAGE,
-                new Vector2(m_graphics.PreferredBackBufferWidth / 2 - stringSize.X / 2, m_graphics.PreferredBackBufferHeight / 2 - stringSize.Y), Color.Yellow);
+            foreach (Objects.Shrooms shroom in m_shroomsList)
+            {
+                m_shroomAnimator.draw(m_spriteBatch, shroom);
+            }
 
+            if (m_gmover)
+            {
+                Vector2 stringSize = m_font.MeasureString(GMOVER);
+                m_spriteBatch.DrawString(
+                    m_font,
+                    GMOVER,
+                    new Vector2(
+                        m_graphics.PreferredBackBufferWidth / 2 - stringSize.X / 2,
+                        m_graphics.PreferredBackBufferHeight / 2 - stringSize.Y),
+                    Color.Yellow
+                    );
+            }
             m_spriteBatch.End();
         }
 
