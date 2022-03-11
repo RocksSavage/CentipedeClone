@@ -14,7 +14,9 @@ namespace CS5410
         private const string GMOVER = "GAME OVER";
 
         List<Objects.Shrooms> m_shroomsList = new List<Objects.Shrooms>();
+        Objects.Player m_player;
         private InanimatedSprite m_shroomAnimator;
+        private InanimatedSprite m_playerAnimator;
 
         int m_cellQuanityX = 30;
         int m_cellQuanityY = 20;
@@ -22,20 +24,23 @@ namespace CS5410
         int m_gameBoardCellWidth;
         int m_gameBoardOriginX;
         int m_gameBoardCellHeight;
-        
-
+        int m_gameBoardCenterX;
+        int m_gameBoardHeight;
+        int m_gameBoardCellWidth2; // for the larger sprite types
 
         public GamePlayView(GraphicsDeviceManager graphics)
         {
             // define how large the game board is
             int m_gameBoardWidth = 896;
-            int m_gameBoardHeight = 606;
+            m_gameBoardHeight = 606;
 
             this.m_graphics = graphics;
             m_gameBoardCellWidth = m_gameBoardWidth / m_cellQuanityX;
-            m_gameBoardOriginX = (m_graphics.PreferredBackBufferWidth / 2) - (m_gameBoardWidth / 2);
+            m_gameBoardCenterX = (m_graphics.PreferredBackBufferWidth / 2);
+            m_gameBoardOriginX = m_gameBoardCenterX - (m_gameBoardWidth / 2);
             m_gameBoardCellHeight = m_gameBoardHeight / m_cellQuanityY;
             m_gameBoardOriginY = m_gameBoardCellHeight;
+            m_gameBoardCellWidth2 = (int)(m_gameBoardCellWidth * 1.8);
         }
         public override void loadContent(ContentManager contentManager)
         {
@@ -45,7 +50,7 @@ namespace CS5410
             Random rmd = new Random();
             for (int i = 0; i < m_cellQuanityX; i++)
             {
-                for (int j = 0; j < m_cellQuanityY; j++)
+                for (int j = 0; j < m_cellQuanityY - 1; j++) // do not let shrooms spawn on bottom row for player
                 {
                     if (rmd.Next(35) == 1 ) // 1/35 chance of mushroom on each square. 
                     {
@@ -61,21 +66,23 @@ namespace CS5410
 
             }
 
-
-            //m_shroomsList.Add(
-            //    new Objects.Shrooms(
-            //        new Vector2(m_gameBoardCellWidth, m_gameBoardCellWidth),
-            //        new Vector2(m_gameBoardOriginX + 16, m_gameBoardOriginY + 16)
-            //        )
-            //    );
-
             // numbers pertain to the subtextures in the spritesheet
             m_shroomAnimator = new InanimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
                 8,
-                14
-            );
+                14);
 
+
+            // create and place player
+            m_player = new Objects.Player(
+                new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
+                new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) )
+                );
+
+            m_playerAnimator = new InanimatedSprite(
+                contentManager.Load<Texture2D>("spritesheet-general"),
+                15,
+                1);
         }
 
         public override GameStateEnum processInput(GameTime gameTime)
@@ -99,6 +106,8 @@ namespace CS5410
             {
                 m_shroomAnimator.draw(m_spriteBatch, shroom);
             }
+
+            m_playerAnimator.draw(m_spriteBatch, m_player);
 
             if (m_gmover)
             {

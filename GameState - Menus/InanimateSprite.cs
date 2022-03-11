@@ -32,14 +32,13 @@ namespace CS5410
             //    m_subImageIndex = m_subImageIndex % m_spriteTime.Length;
             //}
 
-
         }
 
-        public void draw(SpriteBatch spriteBatch, Objects.Shrooms model)
+        public void draw(SpriteBatch spriteBatch, Objects.InanimateSprite model)
         {
             spriteBatch.Draw(
                 m_spriteSheet,
-                new Rectangle( (model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
+                new Rectangle((model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
                 new Rectangle(m_subImageIndex * model.damage, m_spriteLvlId * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
                 Color.White);
         }
