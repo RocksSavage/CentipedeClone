@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using CS5410.Input;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -27,6 +28,9 @@ namespace CS5410
         int m_gameBoardCenterX;
         int m_gameBoardHeight;
         int m_gameBoardCellWidth2; // for the larger sprite types
+
+        private KeyboardInput m_inputKeyboard = new KeyboardInput();
+
 
         public GamePlayView(GraphicsDeviceManager graphics)
         {
@@ -60,10 +64,8 @@ namespace CS5410
                                 new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * i), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * j))  //location
                                 )
                             );
-
                     }
                 }
-
             }
 
             // numbers pertain to the subtextures in the spritesheet
@@ -76,13 +78,21 @@ namespace CS5410
             // create and place player
             m_player = new Objects.Player(
                 new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
-                new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) )
+                new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) ),
+                100f
                 );
 
             m_playerAnimator = new InanimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
                 15,
                 1);
+
+            // Setup input handlers
+            m_inputKeyboard.registerCommand(ControllerState.MoveLeft, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveLeft(gameTime); }));
+            m_inputKeyboard.registerCommand(ControllerState.MoveRight, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveRight(gameTime); }));
+            m_inputKeyboard.registerCommand(ControllerState.MoveUp, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveUp(gameTime); }));
+            //m_inputKeyboard.registerCommand(ControllerState.Fire, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveUp(gameTime); }));
+
         }
 
         public override GameStateEnum processInput(GameTime gameTime)
@@ -96,6 +106,10 @@ namespace CS5410
         }
         public override void update(GameTime gameTime)
         {
+            //m_player.update(); // is this how it work????
+
+            m_inputKeyboard.Update(gameTime);
+
         }
 
         public override void render(GameTime gameTime)
