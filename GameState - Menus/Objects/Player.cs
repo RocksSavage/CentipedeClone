@@ -10,12 +10,12 @@ namespace CS5410.Objects
 
         public void moveDown(GameTime gameTime)
         {
-            //dsf
+            m_center.Y += m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
         public void moveUp(GameTime gameTime)
         {
             //TODO
-            m_center.Y += (Center.Y * m_speed);
+            m_center.Y -=  m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
         }
 
         public void moveLeft(GameTime gameTime)
