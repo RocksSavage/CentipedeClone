@@ -20,15 +20,15 @@ namespace CS5410
 
         protected override void Initialize()
         {
-            m_graphics.PreferredBackBufferWidth = 1920;
-            m_graphics.PreferredBackBufferHeight = 1080;
+            m_graphics.PreferredBackBufferWidth = 1366;
+            m_graphics.PreferredBackBufferHeight = 768;
 
             m_graphics.ApplyChanges();
 
             // Create all the game states here
             m_states = new Dictionary<GameStateEnum, IGameState>();
             m_states.Add(GameStateEnum.MainMenu, new MainMenuView());
-            m_states.Add(GameStateEnum.GamePlay, new GamePlayView());
+            m_states.Add(GameStateEnum.GamePlay, new GamePlayView(m_graphics));
             m_states.Add(GameStateEnum.HighScores, new HighScoresView());
             m_states.Add(GameStateEnum.Settings, new SettingsView());
             m_states.Add(GameStateEnum.About, new AboutView());
