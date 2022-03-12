@@ -36,26 +36,31 @@ namespace CS5410
                 if (ControllerState.MoveLeft == Keys.None && pkeys.Length > 0)
                 {
                     ControllerState.MoveLeft = pkeys[0];
+                    ControllerState.dirty = true;
                     return GameStateEnum.Settings;
                 }
                 if (ControllerState.MoveRight == Keys.None && pkeys.Length > 0)
                 {
                     ControllerState.MoveRight = pkeys[0];
+                    ControllerState.dirty = true;
                     return GameStateEnum.Settings;
                 }
                 if (ControllerState.MoveDown == Keys.None && pkeys.Length > 0)
                 {
                     ControllerState.MoveDown = pkeys[0];
+                    ControllerState.dirty = true;
                     return GameStateEnum.Settings;
                 }
                 if (ControllerState.MoveUp == Keys.None && pkeys.Length > 0)
                 {
                     ControllerState.MoveUp = pkeys[0];
+                    ControllerState.dirty = true;
                     return GameStateEnum.Settings;
                 }
                 if (ControllerState.Fire == Keys.None && pkeys.Length > 0)
                 {
                     ControllerState.Fire = pkeys[0];
+                    ControllerState.dirty = true;
                     return GameStateEnum.Settings;
                 }
 

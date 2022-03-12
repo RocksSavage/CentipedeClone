@@ -22,7 +22,10 @@ namespace CS5410.Input
             }
             m_commandEntries.Add(key, new CommandEntry(key, keyPressOnly, callback));
         }
-
+        public void empty()
+        {
+            m_commandEntries.Clear();
+        }
         /// <summary>
         /// Track all registered commands in this dictionary
         /// </summary>

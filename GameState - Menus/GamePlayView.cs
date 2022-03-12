@@ -87,14 +87,35 @@ namespace CS5410
                 15,
                 1);
 
-            // Setup input handlers
-            m_inputKeyboard.registerCommand(ControllerState.MoveLeft, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveLeft(gameTime); }));
-            m_inputKeyboard.registerCommand(ControllerState.MoveRight, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveRight(gameTime); }));
-            m_inputKeyboard.registerCommand(ControllerState.MoveUp, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveUp(gameTime); }));
-            //m_inputKeyboard.registerCommand(ControllerState.Fire, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveUp(gameTime); }));
-
+            // initialize controls
+            updateControls(true);
         }
+        public void updateControls(bool onstartup = false)
+        {
+            if (ControllerState.dirty == true || onstartup)
+            {
+                m_inputKeyboard.empty();
 
+                // Setup input handlers
+                m_inputKeyboard.registerCommand(ControllerState.MoveLeft, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveLeft(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveRight, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveRight(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveUp, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveUp(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveDown, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveDown(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.Fire, true, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.fire(gameTime); }));
+            }
+        }
+        public bool shroomCollision(Objects.AnimatedSprite model)
+        {
+            foreach(Objects.Shrooms ee in m_shroomsList)
+            {
+                return model.collide((Objects.AnimatedSprite)ee);
+            }
+            return false;
+        }
+        public void playerCollision(Objects.AnimatedSprite model)
+        {
+            
+        }
         public override GameStateEnum processInput(GameTime gameTime)
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -107,7 +128,7 @@ namespace CS5410
         public override void update(GameTime gameTime)
         {
             //m_player.update(); // is this how it work????
-
+            updateControls();
             m_inputKeyboard.Update(gameTime);
 
         }

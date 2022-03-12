@@ -14,8 +14,9 @@ namespace CS5410.Objects
         }
         public void moveUp(GameTime gameTime)
         {
-            //TODO
-            m_center.Y -=  m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            //TODO 
+            var bob = m_center.Y - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            m_center.X = bob;
         }
 
         public void moveLeft(GameTime gameTime)
@@ -24,6 +25,10 @@ namespace CS5410.Objects
         }
 
         public void moveRight(GameTime gameTime)
+        {
+            //TODO
+        }
+        public void fire(GameTime gameTime)
         {
             //TODO
         }

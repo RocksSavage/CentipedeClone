@@ -32,5 +32,6 @@ namespace CS5410
         public static Keys MoveDown = Keys.Down;
         public static Keys MoveUp = Keys.Up;
         public static Keys Fire = Keys.Space;
+        public static bool dirty = false;
     }
 }
