@@ -42,9 +42,5 @@ namespace CS5410.Objects
             set { m_rotation = value; }
         }
 
-        public static explicit operator AnimatedSprite(Shrooms v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
