@@ -9,14 +9,10 @@ namespace CS5410.Objects
         protected Vector2 m_center;
         protected float m_rotation = 0;
 
-        // uncomment out these lines to keep going with the madnes
-        //GamePlayView m_gameView;
-
-        public AnimatedSprite(Vector2 size, Vector2 center/*, GamePlayView game*/)
+        public AnimatedSprite(Vector2 size, Vector2 center)
         {
             m_size = size;
             m_center = center;
-            //m_gameView = game;
         }
 
         public Vector2 Size
@@ -31,9 +27,11 @@ namespace CS5410.Objects
 
         public bool collide(AnimatedSprite other)
         {
-            // TODO
+            //Vector2 rect1 = this.m_center - (this.Size / 2);
+            Rectangle thisRec = new Rectangle((this.m_center - (this.Size / 2)).ToPoint(),this.Size.ToPoint());
+            Rectangle othRec = new Rectangle((other.m_center - (other.Size / 2)).ToPoint(), other.Size.ToPoint());
 
-            return false;
+            return thisRec.Intersects(othRec);
         }
 
         public float Rotation

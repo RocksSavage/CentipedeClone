@@ -61,7 +61,8 @@ namespace CS5410
                         m_shroomsList.Add(
                             new Objects.Shrooms(
                                 new Vector2(m_gameBoardCellWidth, m_gameBoardCellHeight), //size
-                                new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * i), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * j))  //location
+                                new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * i), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * j)),  //location
+                                this
                                 )
                             );
                     }
@@ -79,6 +80,7 @@ namespace CS5410
             m_player = new Objects.Player(
                 new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
                 new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) ),
+                this,
                 100f
                 );
 
@@ -104,13 +106,14 @@ namespace CS5410
                 m_inputKeyboard.registerCommand(ControllerState.Fire, true, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.fire(gameTime); }));
             }
         }
-        public bool shroomCollision(Objects.AnimatedSprite model)
+        public Objects.Shrooms shroomCollision(Objects.AnimatedSprite model)
         {
             foreach(Objects.Shrooms ee in m_shroomsList)
             {
-                return model.collide((Objects.AnimatedSprite)ee);
+                if (model.collide((Objects.AnimatedSprite)ee))
+                    return ee;
             }
-            return false;
+            return null;
         }
         public void playerCollision(Objects.AnimatedSprite model)
         {
