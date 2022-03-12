@@ -14,7 +14,10 @@ namespace CS5410.Objects
 
         public void moveDown(GameTime gameTime)
         {
-            m_center.Y += m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds;
+            var nextspc = new Vector2(this.m_center.X, m_center.Y + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            Shrooms collider = m_gameView.shroomCollision(new AnimatedSprite(this.Size, nextspc));
+            if (collider == null)
+                m_center.Y = nextspc.Y;
         }
         public void moveUp(GameTime gameTime)
         {
@@ -27,16 +30,22 @@ namespace CS5410.Objects
 
         public void moveLeft(GameTime gameTime)
         {
-            //TODO
+            var nextspc = new Vector2(this.m_center.X - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds, m_center.Y);
+            Shrooms collider = m_gameView.shroomCollision(new AnimatedSprite(this.Size, nextspc));
+            if (collider == null)
+                m_center.X = nextspc.X;
         }
 
         public void moveRight(GameTime gameTime)
         {
-            //TODO
+            var nextspc = new Vector2(this.m_center.X + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds, m_center.Y);
+            Shrooms collider = m_gameView.shroomCollision(new AnimatedSprite(this.Size, nextspc));
+            if (collider == null)
+                m_center.X = nextspc.X;
         }
         public void fire(GameTime gameTime)
         {
-            //TODO
+            
         }
     }
 }
