@@ -11,7 +11,10 @@ namespace CS5410.Objects
             m_speed = speed;
             m_gameAgents = gameAgents;
         }
-
+        public void update(GameTime gameTime)
+        {
+            this.moveUp(gameTime);
+        }
         public void moveUp(GameTime gameTime)
         {
             //TODO 

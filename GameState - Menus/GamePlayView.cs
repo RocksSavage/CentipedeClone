@@ -14,10 +14,10 @@ namespace CS5410
         private SpriteFont m_font;
         private const string GMOVER = "GAME OVER";
 
-        List<Objects.Shrooms> m_shroomsList = new List<Objects.Shrooms>();
-        Objects.Player m_player;
+        GameAgents gameAgents;
         private InanimatedSprite m_shroomAnimator;
         private InanimatedSprite m_playerAnimator;
+        private InanimatedSprite m_lazerAnimator;
 
         int m_cellQuanityX = 30;
         int m_cellQuanityY = 20;
@@ -45,6 +45,8 @@ namespace CS5410
             m_gameBoardCellHeight = m_gameBoardHeight / m_cellQuanityY;
             m_gameBoardOriginY = m_gameBoardCellHeight;
             m_gameBoardCellWidth2 = (int)(m_gameBoardCellWidth * 1.8);
+
+            gameAgents = new GameAgents(m_gameBoardCellWidth, m_gameBoardCellHeight);
         }
         public override void loadContent(ContentManager contentManager)
         {
@@ -58,11 +60,10 @@ namespace CS5410
                 {
                     if (rmd.Next(35) == 1 ) // 1/35 chance of mushroom on each square. 
                     {
-                        m_shroomsList.Add(
+                        gameAgents.m_shroomsList.Add(
                             new Objects.Shrooms(
                                 new Vector2(m_gameBoardCellWidth, m_gameBoardCellHeight), //size
-                                new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * i), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * j)),  //location
-                                this
+                                new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * i), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * j))  //location
                                 )
                             );
                     }
@@ -75,12 +76,17 @@ namespace CS5410
                 8,
                 14);
 
+            // create lazer animator
+            m_lazerAnimator = new InanimatedSprite(
+                contentManager.Load<Texture2D>("spritesheet-general"),
+                15, //15
+                13);//13
 
             // create and place player
-            m_player = new Objects.Player(
+            gameAgents.m_player = new Objects.Player(
                 new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
                 new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) ),
-                this,
+                this.gameAgents,
                 100f
                 );
 
@@ -99,25 +105,12 @@ namespace CS5410
                 m_inputKeyboard.empty();
 
                 // Setup input handlers
-                m_inputKeyboard.registerCommand(ControllerState.MoveLeft, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveLeft(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.MoveRight, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveRight(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.MoveUp, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveUp(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.MoveDown, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.moveDown(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.Fire, true, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_player.fire(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveLeft, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveLeft(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveRight, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveRight(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveUp, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveUp(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveDown, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveDown(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.Fire, true, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.fire(gameTime); }));
             }
-        }
-        public Objects.Shrooms shroomCollision(Objects.AnimatedSprite model)
-        {
-            foreach(Objects.Shrooms ee in m_shroomsList)
-            {
-                if (model.collide((Objects.AnimatedSprite)ee))
-                    return ee;
-            }
-            return null;
-        }
-        public void playerCollision(Objects.AnimatedSprite model)
-        {
-            
         }
         public override GameStateEnum processInput(GameTime gameTime)
         {
@@ -130,22 +123,31 @@ namespace CS5410
         }
         public override void update(GameTime gameTime)
         {
-            //m_player.update(); // is this how it work????
+            // updating the controls like a fool. 
             updateControls();
             m_inputKeyboard.Update(gameTime);
 
+            foreach (Objects.Lazer lazer in gameAgents.m_lazerList)
+            {
+                lazer.update(gameTime);
+            }
         }
 
         public override void render(GameTime gameTime)
         {
             m_spriteBatch.Begin();
 
-            foreach (Objects.Shrooms shroom in m_shroomsList)
+            foreach (Objects.Shrooms shroom in gameAgents.m_shroomsList)
             {
                 m_shroomAnimator.draw(m_spriteBatch, shroom);
             }
-
-            m_playerAnimator.draw(m_spriteBatch, m_player);
+            
+            foreach (Objects.Lazer lazer in gameAgents.m_lazerList)
+            {
+                m_lazerAnimator.draw(m_spriteBatch, lazer);
+            }
+            
+            m_playerAnimator.draw(m_spriteBatch, gameAgents.m_player);
 
             if (m_gmover)
             {
