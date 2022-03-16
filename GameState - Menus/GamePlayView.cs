@@ -14,8 +14,8 @@ namespace CS5410
         private SpriteFont m_font;
         private const string GMOVER = "GAME OVER";
 
-        GameAgents gameAgents;
-        private InanimatedSprite m_shroomAnimator;
+        GameAgents m_gameAgents;
+        private ShroomAnimator m_shroomAnimator;
         private InanimatedSprite m_playerAnimator;
         private InanimatedSprite m_lazerAnimator;
 
@@ -46,7 +46,7 @@ namespace CS5410
             m_gameBoardOriginY = m_gameBoardCellHeight;
             m_gameBoardCellWidth2 = (int)(m_gameBoardCellWidth * 1.8);
 
-            gameAgents = new GameAgents(m_gameBoardCellWidth, m_gameBoardCellHeight);
+            m_gameAgents = new GameAgents(m_gameBoardCellWidth, m_gameBoardCellHeight);
         }
         public override void loadContent(ContentManager contentManager)
         {
@@ -58,20 +58,30 @@ namespace CS5410
             {
                 for (int j = 0; j < m_cellQuanityY - 1; j++) // do not let shrooms spawn on bottom row for player
                 {
-                    if (rmd.Next(35) == 1 ) // 1/35 chance of mushroom on each square. 
+                    if (/*rmd.Next(35) == 1 */false) // 1/35 chance of mushroom on each square. 
                     {
-                        gameAgents.m_shroomsList.Add(
+                        m_gameAgents.m_shroomsList.Add(
                             new Objects.Shrooms(
                                 new Vector2(m_gameBoardCellWidth, m_gameBoardCellHeight), //size
-                                new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * i), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * j))  //location
+                                new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * i), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * j)),  //location
+                                m_gameAgents
                                 )
                             );
                     }
                 }
             }
 
+            // deleteLATER
+            m_gameAgents.m_shroomsList.Add(
+                new Objects.Shrooms(
+                    new Vector2(m_gameBoardCellWidth, m_gameBoardCellHeight), //size
+                    new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * 15), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * 15)),  //location
+                    m_gameAgents
+                    )
+                );
+
             // numbers pertain to the subtextures in the spritesheet
-            m_shroomAnimator = new InanimatedSprite(
+            m_shroomAnimator = new ShroomAnimator(
                 contentManager.Load<Texture2D>("spritesheet-general"),
                 8,
                 14);
@@ -83,10 +93,10 @@ namespace CS5410
                 13);//13
 
             // create and place player
-            gameAgents.m_player = new Objects.Player(
+            m_gameAgents.m_player = new Objects.Player(
                 new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
                 new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) ),
-                this.gameAgents,
+                this.m_gameAgents,
                 100f
                 );
 
@@ -105,11 +115,11 @@ namespace CS5410
                 m_inputKeyboard.empty();
 
                 // Setup input handlers
-                m_inputKeyboard.registerCommand(ControllerState.MoveLeft, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveLeft(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.MoveRight, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveRight(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.MoveUp, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveUp(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.MoveDown, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.moveDown(gameTime); }));
-                m_inputKeyboard.registerCommand(ControllerState.Fire, true, new InputDeviceHelper.CommandDelegate((gameTime, value) => { gameAgents.m_player.fire(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveLeft, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_gameAgents.m_player.moveLeft(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveRight, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_gameAgents.m_player.moveRight(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveUp, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_gameAgents.m_player.moveUp(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.MoveDown, false, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_gameAgents.m_player.moveDown(gameTime); }));
+                m_inputKeyboard.registerCommand(ControllerState.Fire, true, new InputDeviceHelper.CommandDelegate((gameTime, value) => { m_gameAgents.m_player.fire(gameTime); }));
             }
         }
         public override GameStateEnum processInput(GameTime gameTime)
@@ -127,7 +137,9 @@ namespace CS5410
             updateControls();
             m_inputKeyboard.Update(gameTime);
 
-            foreach (Objects.Lazer lazer in gameAgents.m_lazerList)
+            m_gameAgents.unregisterAnimatedSprites();
+
+            foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
             {
                 lazer.update(gameTime);
             }
@@ -137,17 +149,17 @@ namespace CS5410
         {
             m_spriteBatch.Begin();
 
-            foreach (Objects.Shrooms shroom in gameAgents.m_shroomsList)
+            foreach (Objects.Shrooms shroom in m_gameAgents.m_shroomsList)
             {
                 m_shroomAnimator.draw(m_spriteBatch, shroom);
             }
             
-            foreach (Objects.Lazer lazer in gameAgents.m_lazerList)
+            foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
             {
                 m_lazerAnimator.draw(m_spriteBatch, lazer);
             }
             
-            m_playerAnimator.draw(m_spriteBatch, gameAgents.m_player);
+            m_playerAnimator.draw(m_spriteBatch, m_gameAgents.m_player);
 
             if (m_gmover)
             {

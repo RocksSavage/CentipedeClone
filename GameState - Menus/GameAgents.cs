@@ -8,6 +8,8 @@ namespace CS5410
 	{
         public List<Objects.Shrooms> m_shroomsList = new List<Objects.Shrooms>();
 		public List<Objects.Lazer> m_lazerList = new List<Objects.Lazer>();
+        public List<Objects.Lazer> m_rmLazerList = new List<Objects.Lazer>();
+
         public Objects.Player m_player;
 
         private int m_cellHeight;
@@ -28,10 +30,30 @@ namespace CS5410
             m_lazerList.Add(
                 new Objects.Lazer(
                     new Vector2(m_cellWidth, m_cellHeight),
-                    center - (new Vector2(center.X, center.Y - (m_cellHeight / 2))),
+                    center/* - (new Vector2(center.X, center.Y - (m_cellHeight / 2)))*/,
                     this,
-                    1.5f)
+                    150f,
+                    m_cellHeight)
                 );
+        }
+        public void unregisterAnimatedSprites()
+        {
+            m_lazerList.RemoveAll(item => m_rmLazerList.Contains(item));
+        }
+        public bool animatedSpriteCollisionAndDeath(Objects.AnimatedSprite model)
+        {
+            foreach(Objects.Shrooms ee in m_shroomsList)
+            {
+                if (model.collide((Objects.AnimatedSprite)ee))
+                {
+                    ee.Damage = ee.Damage++;
+                    return true;
+                }
+            }
+            //foreach(Objects. ee in m_lazerList)
+            //{
+            //}
+            return false;
         }
         public Objects.Shrooms shroomCollision(Objects.AnimatedSprite model)
         {
