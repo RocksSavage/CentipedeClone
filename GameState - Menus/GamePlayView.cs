@@ -45,12 +45,24 @@ namespace CS5410
             int m_gameBoardWidth = 896;
             int m_gameBoardHeight = 606;
 
+            // It's too late to refactor this out. 
             m_gameBoardCellWidth = m_gameBoardWidth / m_cellQuanityX;
             m_gameBoardCenterX = (m_graphics.PreferredBackBufferWidth / 2);
             m_gameBoardOriginX = m_gameBoardCenterX - (m_gameBoardWidth / 2);
             m_gameBoardCellHeight = m_gameBoardHeight / m_cellQuanityY;
             m_gameBoardOriginY = m_gameBoardCellHeight;
             m_gameBoardCellWidth2 = (int)(m_gameBoardCellWidth * 1.8);
+
+            // But if I did refactor, it'd be with this. 
+            gameBoard.Left = m_gameBoardOriginX;
+            gameBoard.Right = m_gameBoardOriginX + m_gameBoardWidth;
+            gameBoard.Top = m_gameBoardOriginY;
+            gameBoard.Bottom = m_gameBoardOriginY + m_gameBoardHeight;
+            gameBoard.CellHeight = m_gameBoardCellHeight;
+            gameBoard.CellWidth = m_gameBoardCellWidth;
+            gameBoard.Width = m_gameBoardWidth;
+            gameBoard.Height = m_gameBoardHeight;
+            gameBoard.PlayerBarrier = 2* (m_gameBoardHeight / 3);
 
             m_gameAgents = new GameAgents(m_gameBoardCellWidth, m_gameBoardCellHeight);
             m_font = contentManager.Load<SpriteFont>("Fonts/menu");
@@ -150,7 +162,7 @@ namespace CS5410
             }
             //foreach (Objects.Player player in m_gameAgents.m_playerList)
             //{
-                //player.update(gameTime);
+            //    player.update(gameTime);
             //}
         }
 

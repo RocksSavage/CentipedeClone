@@ -35,6 +35,16 @@ namespace CS5410
                 m_origin,
                 Color.Green);
 
+            int cursor = gameBoard.Right - gameBoard.CellWidth;
+            for (int i = 0; i < remainingLives; i++)
+            {
+                spriteBatch.Draw(
+                    m_spriteSheet,
+                    new Rectangle(cursor, 0, gameBoard.CellWidth,gameBoard.CellHeight),
+                    new Rectangle(3,9,8,8),
+                    Color.White);
+                cursor -= gameBoard.CellWidth+2;
+            }
         }
     }
 }

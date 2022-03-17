@@ -25,14 +25,14 @@ namespace CS5410.Objects
         {
             var nextspc = new Vector2(this.m_center.X, m_center.Y + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             Shrooms collider = m_gameAgents.shroomCollision(new AnimatedSprite(this.Size, nextspc));
-            if (collider == null)
+            if (collider == null && nextspc.Y < gameBoard.Bottom)
                 m_center.Y = nextspc.Y;
         }
         public void moveUp(GameTime gameTime)
         {
             var nextspc = new Vector2(this.m_center.X,m_center.Y - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             Shrooms collider = m_gameAgents.shroomCollision(new AnimatedSprite(this.Size, nextspc));
-            if (collider == null)
+            if (collider == null && nextspc.Y > gameBoard.PlayerBarrier)
                 m_center.Y = nextspc.Y;
         }
 
@@ -40,7 +40,7 @@ namespace CS5410.Objects
         {
             var nextspc = new Vector2(this.m_center.X - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds, m_center.Y);
             Shrooms collider = m_gameAgents.shroomCollision(new AnimatedSprite(this.Size, nextspc));
-            if (collider == null || nextspc.X > m_originX)
+            if (collider == null && nextspc.X > gameBoard.Left)
                 m_center.X = nextspc.X;
         }
 
@@ -48,7 +48,7 @@ namespace CS5410.Objects
         {
             var nextspc = new Vector2(this.m_center.X + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds, m_center.Y);
             Shrooms collider = m_gameAgents.shroomCollision(new AnimatedSprite(this.Size, nextspc));
-            if (collider == null && nextspc.X < (m_originX+m_screenWidth))
+            if (collider == null && nextspc.X < gameBoard.Right)
                 m_center.X = nextspc.X;
         }
         public void fire(GameTime gameTime)

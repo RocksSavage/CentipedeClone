@@ -37,12 +37,15 @@ namespace CS5410
 
     public struct gameBoard
     {
-        public int Left;
-        public int Right;
-        public int Bottom;
-        public int Top;
-        public int CellHeight;
-        public int CellWidth;
+        public static int Left;
+        public static int Right;
+        public static int Bottom;
+        public static int Top;
+        public static int CellHeight;
+        public static int CellWidth;
+        public static int Height;
+        public static int Width;
+        public static int PlayerBarrier;
 
     }
 }
