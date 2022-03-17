@@ -17,6 +17,7 @@ namespace CS5410
         GameAgents m_gameAgents;
         private ShroomAnimator m_shroomAnimator;
         private InanimatedSprite m_playerAnimator;
+        private ScoreAnimator m_scoreAnimator;
         private InanimatedSprite m_lazerAnimator;
 
         int m_cellQuanityX = 30;
@@ -29,16 +30,21 @@ namespace CS5410
         int m_gameBoardHeight;
         int m_gameBoardCellWidth2; // for the larger sprite types
 
+
         private KeyboardInput m_inputKeyboard = new KeyboardInput();
 
 
-        public GamePlayView(GraphicsDeviceManager graphics)
+        public void initialize()
+        {
+            // Initalize is called after loadContent. What is the point of this function? 
+        }
+        public override void loadContent(ContentManager contentManager)
         {
             // define how large the game board is
+            // GRADER ↓
             int m_gameBoardWidth = 896;
-            m_gameBoardHeight = 606;
+            int m_gameBoardHeight = 606;
 
-            this.m_graphics = graphics;
             m_gameBoardCellWidth = m_gameBoardWidth / m_cellQuanityX;
             m_gameBoardCenterX = (m_graphics.PreferredBackBufferWidth / 2);
             m_gameBoardOriginX = m_gameBoardCenterX - (m_gameBoardWidth / 2);
@@ -47,9 +53,6 @@ namespace CS5410
             m_gameBoardCellWidth2 = (int)(m_gameBoardCellWidth * 1.8);
 
             m_gameAgents = new GameAgents(m_gameBoardCellWidth, m_gameBoardCellHeight);
-        }
-        public override void loadContent(ContentManager contentManager)
-        {
             m_font = contentManager.Load<SpriteFont>("Fonts/menu");
 
             //create and place mushrooms
@@ -58,7 +61,7 @@ namespace CS5410
             {
                 for (int j = 0; j < m_cellQuanityY - 1; j++) // do not let shrooms spawn on bottom row for player
                 {
-                    if (/*rmd.Next(35) == 1 */false) // 1/35 chance of mushroom on each square. 
+                    if (rmd.Next(35) == 1) // 1/35 chance of mushroom on each square. 
                     {
                         m_gameAgents.m_shroomsList.Add(
                             new Objects.Shrooms(
@@ -71,14 +74,6 @@ namespace CS5410
                 }
             }
 
-            // deleteLATER
-            m_gameAgents.m_shroomsList.Add(
-                new Objects.Shrooms(
-                    new Vector2(m_gameBoardCellWidth, m_gameBoardCellHeight), //size
-                    new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * 15), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * 15)),  //location
-                    m_gameAgents
-                    )
-                );
 
             // numbers pertain to the subtextures in the spritesheet
             m_shroomAnimator = new ShroomAnimator(
@@ -97,13 +92,23 @@ namespace CS5410
                 new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
                 new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) ),
                 this.m_gameAgents,
-                100f
+                150f,
+                m_gameBoardOriginX,
+                m_gameBoardWidth,
+                m_gameBoardCellHeight,
+                m_gameBoardHeight
                 );
+            m_gameAgents.m_playerList.Add(m_gameAgents.m_player);
 
             m_playerAnimator = new InanimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
                 15,
                 1);
+
+            m_scoreAnimator = new ScoreAnimator(
+                contentManager.Load<Texture2D>("spritesheet-general"),
+                m_gameBoardOriginX,
+                m_gameBoardHeight);
 
             // initialize controls
             updateControls(true);
@@ -143,6 +148,10 @@ namespace CS5410
             {
                 lazer.update(gameTime);
             }
+            //foreach (Objects.Player player in m_gameAgents.m_playerList)
+            //{
+                //player.update(gameTime);
+            //}
         }
 
         public override void render(GameTime gameTime)
@@ -158,8 +167,13 @@ namespace CS5410
             {
                 m_lazerAnimator.draw(m_spriteBatch, lazer);
             }
-            
-            m_playerAnimator.draw(m_spriteBatch, m_gameAgents.m_player);
+
+            foreach (Objects.Player player in m_gameAgents.m_playerList)
+            {
+                m_playerAnimator.draw(m_spriteBatch, player);
+            }
+
+            m_scoreAnimator.draw(m_spriteBatch, m_graphics, m_font, m_gameAgents.m_player.Lives,m_gameAgents.m_score);
 
             if (m_gmover)
             {
@@ -175,6 +189,5 @@ namespace CS5410
             }
             m_spriteBatch.End();
         }
-
     }
 }

@@ -80,6 +80,13 @@ namespace CS5410
         {
             m_spriteBatch.Begin();
 
+            // Print Title
+            m_spriteBatch.DrawString(
+                m_fontMenu,
+                "Centipede",
+                new Vector2(m_graphics.PreferredBackBufferWidth / 2 - m_fontMenu.MeasureString("Centipede").X / 2, 100),
+                Color.Green);
+
             // I split the first one's parameters on separate lines to help you see them better
             float bottom = drawMenuItem(
                 m_currentSelection == MenuState.NewGame ? m_fontMenuSelect : m_fontMenu, 

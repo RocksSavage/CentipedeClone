@@ -34,4 +34,15 @@ namespace CS5410
         public static Keys Fire = Keys.Space;
         public static bool dirty = false;
     }
+
+    public struct gameBoard
+    {
+        public int Left;
+        public int Right;
+        public int Bottom;
+        public int Top;
+        public int CellHeight;
+        public int CellWidth;
+
+    }
 }

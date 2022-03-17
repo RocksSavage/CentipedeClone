@@ -38,7 +38,7 @@ namespace CS5410
             spriteBatch.Draw(
                 m_spriteSheet,
                 new Rectangle((model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
-                new Rectangle(m_subImageIndex * model.Damage, m_spriteLvlId * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
+                new Rectangle(m_subImageWidth * model.Damage, m_spriteLvlId * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
                 Color.White);
         }
     }
