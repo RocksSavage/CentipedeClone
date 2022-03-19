@@ -19,6 +19,7 @@ namespace CS5410
         private InanimatedSprite m_playerAnimator;
         private ScoreAnimator m_scoreAnimator;
         private InanimatedSprite m_lazerAnimator;
+        private AnimatedSprite m_fleaAnimator;
 
         int m_cellQuanityX = 30;
         int m_cellQuanityY = 20;
@@ -73,7 +74,7 @@ namespace CS5410
             {
                 for (int j = 0; j < m_cellQuanityY - 1; j++) // do not let shrooms spawn on bottom row for player
                 {
-                    if (rmd.Next(35) == 1) // 1/35 chance of mushroom on each square. 
+                    if (/*rmd.Next(35) == 1*/false) // 1/35 chance of mushroom on each square. 
                     {
                         m_gameAgents.m_shroomsList.Add(
                             new Objects.Shrooms(
@@ -85,8 +86,22 @@ namespace CS5410
                     }
                 }
             }
-
-
+            // DELETE LATER
+            m_gameAgents.m_shroomsList.Add(
+                new Objects.Shrooms(
+                    new Vector2(m_gameBoardCellWidth, m_gameBoardCellHeight), //size
+                    new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * 0), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * 0)),  //location
+                    m_gameAgents
+                    )
+                );
+            m_gameAgents.m_fleaList.Add(
+                    new Objects.Flea(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left, gameBoard.CellHeight * 5),
+                        m_gameAgents,
+                        100f
+                        )
+                    );
             // numbers pertain to the subtextures in the spritesheet
             m_shroomAnimator = new ShroomAnimator(
                 contentManager.Load<Texture2D>("spritesheet-general"),
@@ -98,6 +113,12 @@ namespace CS5410
                 contentManager.Load<Texture2D>("spritesheet-general"),
                 15, //15
                 13);//13
+
+            // create flea animator
+            m_fleaAnimator = new AnimatedSprite(
+                contentManager.Load<Texture2D>("spritesheet-general"),
+                new int[] { 60, 40, 60, 40 },
+                7);
 
             // create and place player
             m_gameAgents.m_player = new Objects.Player(
@@ -156,14 +177,32 @@ namespace CS5410
 
             m_gameAgents.unregisterAnimatedSprites();
 
+            // determine what mobs should spawn
+            Random rmd = new Random();
+
+            //if (m_gameAgents.m_rmFleaList.Count < 1)
+            //{
+            //    m_gameAgents.m_fleaList.Add(
+            //        new Objects.Flea(
+            //            new Vector2(gameBoard.CellWidth,gameBoard.CellHeight),
+            //            new Vector2(gameBoard.Left,gameBoard.CellHeight/2),
+            //            m_gameAgents,
+            //            100f
+            //            )
+            //        );
+                
+            //}
+
+            // let moving things get a change to move
             foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
             {
                 lazer.update(gameTime);
             }
-            //foreach (Objects.Player player in m_gameAgents.m_playerList)
-            //{
-            //    player.update(gameTime);
-            //}
+            foreach (Objects.Flea flea in m_gameAgents.m_fleaList)
+            {
+                flea.update(gameTime);
+            }
+            m_fleaAnimator.update(gameTime);
         }
 
         public override void render(GameTime gameTime)
@@ -178,6 +217,11 @@ namespace CS5410
             foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
             {
                 m_lazerAnimator.draw(m_spriteBatch, lazer);
+            }
+
+            foreach (Objects.Flea flea in m_gameAgents.m_fleaList)
+            {
+                m_fleaAnimator.draw(m_spriteBatch, flea);
             }
 
             foreach (Objects.Player player in m_gameAgents.m_playerList)
