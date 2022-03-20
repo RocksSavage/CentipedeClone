@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 
 namespace CS5410.Objects
 {
@@ -18,28 +19,40 @@ namespace CS5410.Objects
         public void moveDown(GameTime gameTime)
         {
             //TODO 
-            var nextspc = new Vector2(this.m_center.X,m_center.Y - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
-            //var spriteExample = new AnimatedSprite(this.Size, nextspc);
-            //Shrooms collider = m_gameAgents.shroomCollision(spriteExample);
+            var nextspc = new Vector2(this.m_center.X,m_center.Y + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            var spriteExample = new AnimatedSprite(this.Size, nextspc);
 
-            //if (nextspc.Y < (0 - m_cellHeight) ||
-            //    m_gameAgents.animatedSpriteCollisionAndDeath(spriteExample))
-            //{
-            //    if (m_gameAgents.m_lazerList.Contains(this))
-            //        this.m_gameAgents.m_rmLazerList.Add(this);
-            //    return;
-            //}
+            if (nextspc.Y > (gameBoard.Height + gameBoard.CellHeight))
+            {
+                m_gameAgents.m_rmFleaList.Add(this);
+            }
 
-            //if (collider != null)
-            //{
-            //    collider.Damage += 1;
-            //    if (m_gameAgents.m_lazerList.Contains(this))
-            //        this.m_gameAgents.m_rmLazerList.Add(this);
-            //    return;
-            //}
-            //m_center.Y = nextspc.Y;
+            if (this.collide(m_gameAgents.m_player))
+            {
+                m_gameAgents.m_player.Lives--;
+            }
 
-            //m_center.Y = nextspc.Y;
+
+            if ( 
+                ((nextspc.Y - (gameBoard.CellHeight / 2)) % gameBoard.CellHeight < 5) && //only on grid spaces
+                (nextspc.Y < gameBoard.ShroomRows * gameBoard.CellHeight))
+            {
+                Shrooms collider = m_gameAgents.shroomCollision(spriteExample);
+                Random rmd = new Random();
+
+                if (collider == null && rmd.Next(5) < 2)
+                {
+                    m_gameAgents.m_shroomsList.Add(
+                        new Shrooms(
+                            new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                            m_center,
+                            m_gameAgents)
+                        );
+                }
+            }
+
+
+            m_center.Y = nextspc.Y;
 
         }
     }

@@ -18,14 +18,11 @@ namespace CS5410
         public int m_score = 0;
         public Objects.Player m_player;
 
-        private int m_cellHeight;
-        private int m_cellWidth;
+        GamePlayView m_gamePlayView;
 
-
-		public GameAgents(int cellHeight, int cellWidth)
+		public GameAgents(GamePlayView gamePlayView)
         {
-            m_cellHeight = cellHeight;
-            m_cellWidth = cellWidth;
+            m_gamePlayView = gamePlayView;
         }
         public void addlazer(Vector2 center)
         {
@@ -36,11 +33,11 @@ namespace CS5410
 
             m_lazerList.Add(
                 new Objects.Lazer(
-                    new Vector2(m_cellWidth, m_cellHeight),
+                    new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
                     center,
                     this,
                     250f,
-                    m_cellHeight)
+                    gameBoard.CellHeight)
                 );
         }
         public void unregisterAnimatedSprites()
@@ -71,6 +68,7 @@ namespace CS5410
                     return true;
                 }
             }
+            
             return false;
         }
         public Objects.Shrooms shroomCollision(Objects.AnimatedSprite model)
@@ -82,9 +80,9 @@ namespace CS5410
             }
             return null;
         }
-        public void playerCollision(Objects.AnimatedSprite model)
+        public void triggerGmover()
         {
-            //TODO
+            m_gamePlayView.m_gmover = true;
         }
     }
 }

@@ -7,18 +7,14 @@ namespace CS5410.Objects
         private float m_speed;
         private GameAgents m_gameAgents;
         private int m_livesRemaining = 3;
-        private int m_originX;
-        private int m_screenWidth;
-        private int m_cellHeight;
-        private int m_screenHeight;
-        public Player(Vector2 size, Vector2 center, GameAgents game, float speed, int originX, int screenWidth, int cellHeight, int screenHeight) : base(size, center)
+        private Vector2 startingSize;
+        private Vector2 startingCenter;
+        public Player(Vector2 size, Vector2 center, GameAgents game, float speed) : base(size, center)
         { 
             m_speed = speed;
             m_gameAgents = game;
-            m_originX = originX;
-            m_screenWidth = screenWidth;
-            m_cellHeight = cellHeight;
-            m_screenHeight = screenHeight;
+            startingSize = size;
+            startingCenter = center;
         }
 
         public void moveDown(GameTime gameTime)
@@ -53,16 +49,23 @@ namespace CS5410.Objects
         }
         public void fire(GameTime gameTime)
         {
-            m_gameAgents.addlazer(Center);
+            if (m_livesRemaining > 0)
+                m_gameAgents.addlazer(Center);
         }
 
         public int Lives
         {
             get { return this.m_livesRemaining; }
-            set { 
+            set {
                 this.m_livesRemaining = value;
+
+                m_center = startingCenter;
+
                 if (this.m_livesRemaining == 0)
+                {
                     m_gameAgents.m_rmPlayerList.Add(this);
+                    m_gameAgents.triggerGmover();
+                }
             }
         }
     }

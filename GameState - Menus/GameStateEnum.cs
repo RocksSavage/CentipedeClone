@@ -46,6 +46,8 @@ namespace CS5410
         public static int Height;
         public static int Width;
         public static int PlayerBarrier;
-
+        public static int Columns;
+        public static int HalfCellWidth;
+        public static int ShroomRows;
     }
 }

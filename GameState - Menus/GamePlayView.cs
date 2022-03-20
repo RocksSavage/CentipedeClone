@@ -10,7 +10,7 @@ namespace CS5410
 {
     public class GamePlayView : GameStateView
     {
-        bool m_gmover = false;
+        public bool m_gmover = false;
         private SpriteFont m_font;
         private const string GMOVER = "GAME OVER";
 
@@ -64,17 +64,20 @@ namespace CS5410
             gameBoard.Width = m_gameBoardWidth;
             gameBoard.Height = m_gameBoardHeight;
             gameBoard.PlayerBarrier = 2* (m_gameBoardHeight / 3);
+            gameBoard.Columns = gameBoard.Width / gameBoard.CellWidth;
+            gameBoard.HalfCellWidth = gameBoard.CellWidth / 2;
+            gameBoard.ShroomRows = (m_cellQuanityY - 2);
 
-            m_gameAgents = new GameAgents(m_gameBoardCellWidth, m_gameBoardCellHeight);
+            m_gameAgents = new GameAgents(this);
             m_font = contentManager.Load<SpriteFont>("Fonts/menu");
 
             //create and place mushrooms
             Random rmd = new Random();
             for (int i = 0; i < m_cellQuanityX; i++)
             {
-                for (int j = 0; j < m_cellQuanityY - 1; j++) // do not let shrooms spawn on bottom row for player
+                for (int j = 0; j < gameBoard.ShroomRows; j++) // do not let shrooms spawn on bottom row for player
                 {
-                    if (/*rmd.Next(35) == 1*/false) // 1/35 chance of mushroom on each square. 
+                    if (rmd.Next(35) == 1) // 1/35 chance of mushroom on each square. 
                     {
                         m_gameAgents.m_shroomsList.Add(
                             new Objects.Shrooms(
@@ -86,22 +89,8 @@ namespace CS5410
                     }
                 }
             }
-            // DELETE LATER
-            m_gameAgents.m_shroomsList.Add(
-                new Objects.Shrooms(
-                    new Vector2(m_gameBoardCellWidth, m_gameBoardCellHeight), //size
-                    new Vector2(m_gameBoardOriginX + (m_gameBoardCellWidth / 2) + (m_gameBoardCellWidth * 0), m_gameBoardOriginY + (m_gameBoardCellHeight / 2) + (m_gameBoardCellHeight * 0)),  //location
-                    m_gameAgents
-                    )
-                );
-            m_gameAgents.m_fleaList.Add(
-                    new Objects.Flea(
-                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
-                        new Vector2(gameBoard.Left, gameBoard.CellHeight * 5),
-                        m_gameAgents,
-                        100f
-                        )
-                    );
+
+
             // numbers pertain to the subtextures in the spritesheet
             m_shroomAnimator = new ShroomAnimator(
                 contentManager.Load<Texture2D>("spritesheet-general"),
@@ -123,13 +112,9 @@ namespace CS5410
             // create and place player
             m_gameAgents.m_player = new Objects.Player(
                 new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
-                new Vector2(m_gameBoardCenterX, m_gameBoardHeight - (m_gameBoardCellHeight / 2) ),
+                new Vector2(m_gameBoardCenterX, m_gameBoardHeight ),
                 this.m_gameAgents,
-                150f,
-                m_gameBoardOriginX,
-                m_gameBoardWidth,
-                m_gameBoardCellHeight,
-                m_gameBoardHeight
+                150f
                 );
             m_gameAgents.m_playerList.Add(m_gameAgents.m_player);
 
@@ -180,18 +165,17 @@ namespace CS5410
             // determine what mobs should spawn
             Random rmd = new Random();
 
-            //if (m_gameAgents.m_rmFleaList.Count < 1)
-            //{
-            //    m_gameAgents.m_fleaList.Add(
-            //        new Objects.Flea(
-            //            new Vector2(gameBoard.CellWidth,gameBoard.CellHeight),
-            //            new Vector2(gameBoard.Left,gameBoard.CellHeight/2),
-            //            m_gameAgents,
-            //            100f
-            //            )
-            //        );
-                
-            //}
+            if (m_gameAgents.m_fleaList.Count < 1)
+            {
+                m_gameAgents.m_fleaList.Add(
+                    new Objects.Flea(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left + gameBoard.HalfCellWidth + rmd.Next(m_cellQuanityX) * gameBoard.CellWidth, 0 - gameBoard.CellHeight),
+                        m_gameAgents,
+                        100f
+                        )
+                    );
+            }
 
             // let moving things get a change to move
             foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
