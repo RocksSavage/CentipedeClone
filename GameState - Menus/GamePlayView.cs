@@ -20,6 +20,7 @@ namespace CS5410
         private ScoreAnimator m_scoreAnimator;
         private InanimatedSprite m_lazerAnimator;
         private AnimatedSprite m_fleaAnimator;
+        private AnimatedSprite m_spiderAnimator;
 
         int m_cellQuanityX = 30;
         int m_cellQuanityY = 20;
@@ -106,8 +107,14 @@ namespace CS5410
             // create flea animator
             m_fleaAnimator = new AnimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
-                new int[] { 60, 40, 60, 40 },
+                new int[] { 30, 30, 30, 30 },
                 7);
+
+            // create spider animator
+            m_spiderAnimator = new AnimatedSprite(
+                contentManager.Load<Texture2D>("spritesheet-general"),
+                new int[] { 30, 30, 30, 30 },
+                6);
 
             // create and place player
             m_gameAgents.m_player = new Objects.Player(
@@ -176,6 +183,17 @@ namespace CS5410
                         )
                     );
             }
+            if (m_gameAgents.m_spiderList.Count < 1)
+            {
+                m_gameAgents.m_spiderList.Add(
+                    new Objects.Spider(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left , gameBoard.ShroomRows*gameBoard.CellHeight),
+                        m_gameAgents,
+                        100f
+                        )
+                    );
+            }
 
             // let moving things get a change to move
             foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
@@ -185,6 +203,10 @@ namespace CS5410
             foreach (Objects.Flea flea in m_gameAgents.m_fleaList)
             {
                 flea.update(gameTime);
+            }
+            foreach (Objects.Spider spider in m_gameAgents.m_spiderList)
+            {
+                spider.update(gameTime);
             }
             m_fleaAnimator.update(gameTime);
         }
@@ -206,6 +228,10 @@ namespace CS5410
             foreach (Objects.Flea flea in m_gameAgents.m_fleaList)
             {
                 m_fleaAnimator.draw(m_spriteBatch, flea);
+            }
+            foreach (Objects.Spider spider in m_gameAgents.m_spiderList)
+            {
+                m_spiderAnimator.draw(m_spriteBatch, spider);
             }
 
             foreach (Objects.Player player in m_gameAgents.m_playerList)

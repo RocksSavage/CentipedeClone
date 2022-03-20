@@ -14,6 +14,8 @@ namespace CS5410
         public List<Objects.Player> m_rmPlayerList = new List<Objects.Player>();
         public List<Objects.Flea> m_fleaList = new List<Objects.Flea>();
         public List<Objects.Flea> m_rmFleaList = new List<Objects.Flea>();
+        public List<Objects.Spider> m_spiderList = new List<Objects.Spider>();
+        public List<Objects.Spider> m_rmSpiderList = new List<Objects.Spider>(); // finish adding stuff for spider
 
         public int m_score = 0;
         public Objects.Player m_player;
@@ -45,17 +47,20 @@ namespace CS5410
             // give player points
             m_score += 1 * m_rmShroomsList.Count;
             m_score += 25 * m_rmFleaList.Count;
+            m_score += 300 * m_rmFleaList.Count;
 
             m_playerList.RemoveAll(item => m_rmPlayerList.Contains(item));
             m_shroomsList.RemoveAll(item => m_rmShroomsList.Contains(item));
             m_lazerList.RemoveAll(item => m_rmLazerList.Contains(item));
             m_fleaList.RemoveAll(item => m_rmFleaList.Contains(item));
+            m_spiderList.RemoveAll(item => m_rmSpiderList.Contains(item));
 
             // clear old lists
             m_rmPlayerList.Clear();
             m_rmShroomsList.Clear();
             m_rmLazerList.Clear();
             m_rmFleaList.Clear();
+            m_rmSpiderList.Clear();
         }
         public bool animatedSpriteCollisionAndDeath(Objects.AnimatedSprite model)
         {
@@ -68,7 +73,16 @@ namespace CS5410
                     return true;
                 }
             }
-            
+
+            foreach (Objects.Spider ee in m_spiderList)
+            {
+                if (model.collide((Objects.AnimatedSprite)ee))
+                {
+                    m_rmSpiderList.Add(ee);
+                    return true;
+                }
+            }
+
             return false;
         }
         public Objects.Shrooms shroomCollision(Objects.AnimatedSprite model)
