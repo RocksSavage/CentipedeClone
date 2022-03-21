@@ -15,7 +15,9 @@ namespace CS5410
         public List<Objects.Flea> m_fleaList = new List<Objects.Flea>();
         public List<Objects.Flea> m_rmFleaList = new List<Objects.Flea>();
         public List<Objects.Spider> m_spiderList = new List<Objects.Spider>();
-        public List<Objects.Spider> m_rmSpiderList = new List<Objects.Spider>(); // finish adding stuff for spider
+        public List<Objects.Spider> m_rmSpiderList = new List<Objects.Spider>(); 
+        public List<Objects.Scorpion> m_scorpionList = new List<Objects.Scorpion>();
+        public List<Objects.Scorpion> m_rmScorpionList = new List<Objects.Scorpion>(); 
 
         public int m_score = 0;
         public Objects.Player m_player;
@@ -51,6 +53,7 @@ namespace CS5410
             m_lazerList.RemoveAll(item => m_rmLazerList.Contains(item));
             m_fleaList.RemoveAll(item => m_rmFleaList.Contains(item));
             m_spiderList.RemoveAll(item => m_rmSpiderList.Contains(item));
+            m_scorpionList.RemoveAll(item => m_rmScorpionList.Contains(item));
 
             // clear old lists
             m_rmPlayerList.Clear();
@@ -58,6 +61,7 @@ namespace CS5410
             m_rmLazerList.Clear();
             m_rmFleaList.Clear();
             m_rmSpiderList.Clear();
+            m_rmScorpionList.Clear();
         }
         /// <summary>
         /// Currently only Lazer uses this so its safe to use for points tracking. 
@@ -82,6 +86,16 @@ namespace CS5410
                 {
                     m_rmSpiderList.Add(ee);
                     m_score += 25;
+                    return true;
+                }
+            }
+
+            foreach (Objects.Scorpion ee in m_scorpionList)
+            {
+                if (model.collide((Objects.AnimatedSprite)ee))
+                {
+                    m_rmScorpionList.Add(ee);
+                    m_score += 900;
                     return true;
                 }
             }

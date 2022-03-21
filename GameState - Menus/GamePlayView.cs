@@ -21,6 +21,7 @@ namespace CS5410
         private InanimatedSprite m_lazerAnimator;
         private AnimatedSprite m_fleaAnimator;
         private AnimatedSprite m_spiderAnimator;
+        private AnimatedSprite m_scorpionAnimator;
 
         int m_cellQuanityX = 30;
         int m_cellQuanityY = 20;
@@ -68,6 +69,7 @@ namespace CS5410
             gameBoard.Columns = gameBoard.Width / gameBoard.CellWidth;
             gameBoard.HalfCellWidth = gameBoard.CellWidth / 2;
             gameBoard.ShroomRows = (m_cellQuanityY - 2);
+            gameBoard.ShroomRowSpace = gameBoard.ShroomRows * gameBoard.CellHeight;
 
             m_gameAgents = new GameAgents(this);
             m_font = contentManager.Load<SpriteFont>("Fonts/menu");
@@ -113,8 +115,14 @@ namespace CS5410
             // create spider animator
             m_spiderAnimator = new AnimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
-                new int[] { 30, 30, 30, 30 },
+                new int[] { 20, 20, 20, 20, 20, 20, 20, 20 },
                 6);
+
+            // create scorpion animator
+            m_scorpionAnimator = new AnimatedSprite(
+                contentManager.Load<Texture2D>("spritesheet-general"),
+                new int[] { 30, 30, 30, 30 },
+                8);
 
             // create and place player
             m_gameAgents.m_player = new Objects.Player(
@@ -163,7 +171,7 @@ namespace CS5410
         }
         public override void update(GameTime gameTime)
         {
-            // updating the controls like a fool. 
+            // updating the controls like a fool. (or a wizard? all depends on if you can change controls midway)
             updateControls();
             m_inputKeyboard.Update(gameTime);
 
@@ -183,6 +191,7 @@ namespace CS5410
                         )
                     );
             }
+
             if (m_gameAgents.m_spiderList.Count < 1)
             {
                 bool goingWest = rmd.Next(1) == 0;
@@ -201,7 +210,24 @@ namespace CS5410
                     );
             }
 
-            // let moving things get a change to move
+            if (m_gameAgents.m_scorpionList.Count < 1)
+            {
+                bool goingWest = rmd.Next(1) == 0;
+                var spawnZoneFloor = gameBoard.CellHeight;
+                var spawnY = spawnZoneFloor + rmd.Next(gameBoard.ShroomRowSpace - spawnZoneFloor);
+
+                m_gameAgents.m_scorpionList.Add(
+                    new Objects.Scorpion(
+                        new Vector2(m_gameBoardCellWidth2, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left, 300),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        m_gameAgents,
+                        100f,
+                        false
+                        )
+                    );
+            }
+
+            // let moving things get a chance to move
             foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
             {
                 lazer.update(gameTime);
@@ -213,6 +239,10 @@ namespace CS5410
             foreach (Objects.Spider spider in m_gameAgents.m_spiderList)
             {
                 spider.update(gameTime);
+            }
+            foreach (Objects.Scorpion scorpion in m_gameAgents.m_scorpionList)
+            {
+                scorpion.update(gameTime);
             }
             m_fleaAnimator.update(gameTime);
         }
@@ -235,9 +265,15 @@ namespace CS5410
             {
                 m_fleaAnimator.draw(m_spriteBatch, flea);
             }
+
             foreach (Objects.Spider spider in m_gameAgents.m_spiderList)
             {
                 m_spiderAnimator.draw(m_spriteBatch, spider);
+            }
+
+            foreach (Objects.Scorpion scorpion in m_gameAgents.m_scorpionList)
+            {
+                m_scorpionAnimator.draw(m_spriteBatch, scorpion);
             }
 
             foreach (Objects.Player player in m_gameAgents.m_playerList)

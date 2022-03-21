@@ -49,5 +49,6 @@ namespace CS5410
         public static int Columns;
         public static int HalfCellWidth;
         public static int ShroomRows;
+        public static int ShroomRowSpace;
     }
 }
