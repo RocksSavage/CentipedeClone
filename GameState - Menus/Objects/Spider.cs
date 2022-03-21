@@ -7,19 +7,34 @@ namespace CS5410.Objects
     {
         private float m_speed;
         private GameAgents m_gameAgents;
-        public Spider(Vector2 size, Vector2 center, GameAgents gameAgents, float speed) : base(size, center)
+        bool south = false;
+        bool west = false;
+        public Spider(Vector2 size, Vector2 center, GameAgents gameAgents, float speed, bool west) : base(size, center)
         { 
             m_speed = speed;
             m_gameAgents = gameAgents;
+            this.west = west;
         }
         public void update(GameTime gameTime)
         {
-            this.moveDiagonal(gameTime);
+            if (m_center.Y > (gameBoard.Height - gameBoard.CellHeight - gameBoard.HalfCellWidth))
+                south = true;
+
+            else if (m_center.Y < (gameBoard.ShroomRows * gameBoard.CellHeight))
+                south = false;
+
+
+
+            var nextspc = new Vector2(
+                (this.m_center.X + ((west ? -1 : 1) * m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds)),
+                (this.m_center.Y + ((south ? 1 : -1) * m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds))
+                );
+
+
+            this.moveDiagonal(gameTime, nextspc);
         }
-        public void moveDiagonal(GameTime gameTime)
+        public void moveDiagonal(GameTime gameTime, Vector2 nextspc)
         {
-            //TODO 
-            var nextspc = new Vector2(this.m_center.X,m_center.Y + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             var spriteExample = new AnimatedSprite(this.Size, nextspc);
 
             if (nextspc.Y > (gameBoard.Height + gameBoard.CellHeight))
@@ -32,8 +47,7 @@ namespace CS5410.Objects
                 m_gameAgents.m_player.Lives--;
             }
 
-
-            if ( 
+            if (
                 ((nextspc.Y - (gameBoard.CellHeight / 2)) % gameBoard.CellHeight < 5) && //only on grid spaces
                 (nextspc.Y < gameBoard.ShroomRows * gameBoard.CellHeight))
             {
@@ -50,10 +64,7 @@ namespace CS5410.Objects
                         );
                 }
             }
-
-
-            m_center.Y = nextspc.Y;
-
+            m_center = nextspc;
         }
     }
 }

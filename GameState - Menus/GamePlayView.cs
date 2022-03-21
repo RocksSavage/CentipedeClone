@@ -188,9 +188,10 @@ namespace CS5410
                 m_gameAgents.m_spiderList.Add(
                     new Objects.Spider(
                         new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
-                        new Vector2(gameBoard.Left , gameBoard.ShroomRows*gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left , gameBoard.ShroomRows*gameBoard.CellHeight - 100),
                         m_gameAgents,
-                        100f
+                        100f,
+                        false
                         )
                     );
             }
