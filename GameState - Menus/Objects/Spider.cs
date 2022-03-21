@@ -9,21 +9,19 @@ namespace CS5410.Objects
         private GameAgents m_gameAgents;
         bool south = false;
         bool west = false;
-        public Spider(Vector2 size, Vector2 center, GameAgents gameAgents, float speed, bool west) : base(size, center)
+        public Spider(Vector2 size, Vector2 center, GameAgents gameAgents, float speed, bool west, bool south) : base(size, center)
         { 
             m_speed = speed;
             m_gameAgents = gameAgents;
             this.west = west;
+            this.south = south;
         }
         public void update(GameTime gameTime)
         {
-            if (m_center.Y > (gameBoard.Height - gameBoard.CellHeight - gameBoard.HalfCellWidth))
-                south = true;
-
-            else if (m_center.Y < (gameBoard.ShroomRows * gameBoard.CellHeight))
+            if (m_center.Y > gameBoard.Height)
                 south = false;
-
-
+            else if (m_center.Y < (500))
+                south = true;
 
             var nextspc = new Vector2(
                 (this.m_center.X + ((west ? -1 : 1) * m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds)),
@@ -37,7 +35,7 @@ namespace CS5410.Objects
         {
             var spriteExample = new AnimatedSprite(this.Size, nextspc);
 
-            if (nextspc.Y > (gameBoard.Height + gameBoard.CellHeight))
+            if (nextspc.X > (gameBoard.Right) || nextspc.X < gameBoard.Left)
             {
                 m_gameAgents.m_rmSpiderList.Add(this);
             }
@@ -47,23 +45,13 @@ namespace CS5410.Objects
                 m_gameAgents.m_player.Lives--;
             }
 
-            if (
-                ((nextspc.Y - (gameBoard.CellHeight / 2)) % gameBoard.CellHeight < 5) && //only on grid spaces
-                (nextspc.Y < gameBoard.ShroomRows * gameBoard.CellHeight))
-            {
-                Shrooms collider = m_gameAgents.shroomCollision(spriteExample);
-                Random rmd = new Random();
+            Shrooms collider = m_gameAgents.shroomCollision(spriteExample);
 
-                if (collider == null && rmd.Next(5) < 2)
-                {
-                    m_gameAgents.m_shroomsList.Add(
-                        new Shrooms(
-                            new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
-                            m_center,
-                            m_gameAgents)
-                        );
-                }
+            if (collider != null)
+            {
+                m_gameAgents.m_rmShroomsList.Add(collider);
             }
+
             m_center = nextspc;
         }
     }

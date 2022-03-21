@@ -44,10 +44,7 @@ namespace CS5410
         }
         public void unregisterAnimatedSprites()
         {
-            // give player points
-            m_score += 1 * m_rmShroomsList.Count;
-            m_score += 25 * m_rmFleaList.Count;
-            m_score += 300 * m_rmFleaList.Count;
+            
 
             m_playerList.RemoveAll(item => m_rmPlayerList.Contains(item));
             m_shroomsList.RemoveAll(item => m_rmShroomsList.Contains(item));
@@ -62,14 +59,19 @@ namespace CS5410
             m_rmFleaList.Clear();
             m_rmSpiderList.Clear();
         }
+        /// <summary>
+        /// Currently only Lazer uses this so its safe to use for points tracking. 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public bool animatedSpriteCollisionAndDeath(Objects.AnimatedSprite model)
         {
-
             foreach (Objects.Flea ee in m_fleaList)
             {
                 if (model.collide((Objects.AnimatedSprite)ee))
                 {
                     m_rmFleaList.Add(ee);
+                    m_score += 300;
                     return true;
                 }
             }
@@ -79,6 +81,7 @@ namespace CS5410
                 if (model.collide((Objects.AnimatedSprite)ee))
                 {
                     m_rmSpiderList.Add(ee);
+                    m_score += 25;
                     return true;
                 }
             }

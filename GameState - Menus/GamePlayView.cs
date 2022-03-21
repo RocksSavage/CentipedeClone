@@ -185,13 +185,18 @@ namespace CS5410
             }
             if (m_gameAgents.m_spiderList.Count < 1)
             {
+                bool goingWest = rmd.Next(1) == 0;
+                var spawnZoneFloor = gameBoard.ShroomRows * gameBoard.CellHeight;
+                var spawnY = spawnZoneFloor + rmd.Next(gameBoard.Height - spawnZoneFloor);
+
                 m_gameAgents.m_spiderList.Add(
                     new Objects.Spider(
                         new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
-                        new Vector2(gameBoard.Left , gameBoard.ShroomRows*gameBoard.CellHeight - 100),
+                        new Vector2( gameBoard.Left, gameBoard.Height - 100),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
                         m_gameAgents,
                         100f,
-                        false
+                        false,//goingWest,
+                        false/*rmd.Next(1) == 0*/
                         )
                     );
             }

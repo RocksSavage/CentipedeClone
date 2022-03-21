@@ -35,6 +35,7 @@ namespace CS5410.Objects
             if (collider != null)
             {
                 collider.Damage += 1;
+                m_gameAgents.m_score += 1;
                 if (m_gameAgents.m_lazerList.Contains(this))
                     this.m_gameAgents.m_rmLazerList.Add(this);
                 return;
