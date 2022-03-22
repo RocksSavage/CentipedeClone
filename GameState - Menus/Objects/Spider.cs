@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 
 namespace CS5410.Objects
 {
@@ -10,7 +9,7 @@ namespace CS5410.Objects
         bool south = false;
         bool west = false;
         public Spider(Vector2 size, Vector2 center, GameAgents gameAgents, float speed, bool west, bool south) : base(size, center)
-        { 
+        {
             m_speed = speed;
             m_gameAgents = gameAgents;
             this.west = west;

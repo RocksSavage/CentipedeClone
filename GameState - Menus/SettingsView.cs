@@ -147,7 +147,7 @@ namespace CS5410
             SpriteFont font = m_currentSelection == moveState ? m_fontMenuSelect : m_fontMenu;
             Color color = m_currentSelection == moveState ? Color.Yellow : Color.Blue;
             Vector2 stringSize = font.MeasureString(text);
-            
+
             string text2 = keyState == Keys.None ? BTPROMPT : keyState.ToString();
             if (keyState == Keys.Left || keyState == Keys.Right || keyState == Keys.Up || keyState == Keys.Down)
                 text2 += " Arrow";

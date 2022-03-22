@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework.Input;
 
 namespace CS5410
 {
@@ -48,6 +47,7 @@ namespace CS5410
         public static int PlayerBarrier;
         public static int Columns;
         public static int HalfCellWidth;
+        public static int HalfCellHeight;
         public static int ShroomRows;
         public static int ShroomRowSpace;
     }

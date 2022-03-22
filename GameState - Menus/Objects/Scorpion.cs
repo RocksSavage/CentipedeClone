@@ -9,7 +9,7 @@ namespace CS5410.Objects
         private GameAgents m_gameAgents;
         bool west = false;
         public Scorpion(Vector2 size, Vector2 center, GameAgents gameAgents, float speed, bool west) : base(size, center)
-        { 
+        {
             m_speed = speed;
             m_gameAgents = gameAgents;
             this.west = west;
@@ -18,7 +18,7 @@ namespace CS5410.Objects
         {
 
             var nextspc = new Vector2(
-                (this.m_center.X + ((west ? -1 : 1) * m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds)),
+                (this.m_center.X + (-1 * m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds)),
                 (this.m_center.Y)
                 );
 
@@ -29,7 +29,7 @@ namespace CS5410.Objects
         {
             var spriteExample = new AnimatedSprite(this.Size, nextspc);
 
-            if (nextspc.X > gameBoard.Left || nextspc.X < gameBoard.Right)
+            if (nextspc.X < gameBoard.Left || nextspc.X > gameBoard.Right)
             {
                 m_gameAgents.m_rmScorpionList.Add(this);
             }
@@ -48,12 +48,7 @@ namespace CS5410.Objects
 
                 if (collider != null)
                 {
-                    m_gameAgents.m_shroomsList.Add(
-                        new Shrooms(
-                            new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
-                            m_center,
-                            m_gameAgents)
-                        );
+                    collider.isPoisoned = true;
                 }
             }
 

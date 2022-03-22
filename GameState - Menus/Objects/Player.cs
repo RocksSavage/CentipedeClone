@@ -10,7 +10,7 @@ namespace CS5410.Objects
         private Vector2 startingSize;
         private Vector2 startingCenter;
         public Player(Vector2 size, Vector2 center, GameAgents game, float speed) : base(size, center)
-        { 
+        {
             m_speed = speed;
             m_gameAgents = game;
             startingSize = size;
@@ -26,7 +26,7 @@ namespace CS5410.Objects
         }
         public void moveUp(GameTime gameTime)
         {
-            var nextspc = new Vector2(this.m_center.X,m_center.Y - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            var nextspc = new Vector2(this.m_center.X, m_center.Y - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             Shrooms collider = m_gameAgents.shroomCollision(new AnimatedSprite(this.Size, nextspc));
             if (collider == null && nextspc.Y > gameBoard.PlayerBarrier)
                 m_center.Y = nextspc.Y;
@@ -56,7 +56,8 @@ namespace CS5410.Objects
         public int Lives
         {
             get { return this.m_livesRemaining; }
-            set {
+            set
+            {
                 this.m_livesRemaining = value;
 
                 m_center = startingCenter;

@@ -8,7 +8,7 @@ namespace CS5410.Objects
         private float m_speed;
         private GameAgents m_gameAgents;
         public Flea(Vector2 size, Vector2 center, GameAgents gameAgents, float speed) : base(size, center)
-        { 
+        {
             m_speed = speed;
             m_gameAgents = gameAgents;
         }
@@ -18,7 +18,7 @@ namespace CS5410.Objects
         }
         public void moveDown(GameTime gameTime)
         {
-            var nextspc = new Vector2(this.m_center.X,m_center.Y + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
+            var nextspc = new Vector2(this.m_center.X, m_center.Y + m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             var spriteExample = new AnimatedSprite(this.Size, nextspc);
 
             if (nextspc.Y > (gameBoard.Height + gameBoard.CellHeight))
@@ -32,7 +32,7 @@ namespace CS5410.Objects
             }
 
 
-            if ( 
+            if (
                 ((nextspc.Y - (gameBoard.CellHeight / 2)) % gameBoard.CellHeight < 5) && //only on grid spaces
                 (nextspc.Y < gameBoard.ShroomRows * gameBoard.CellHeight))
             {

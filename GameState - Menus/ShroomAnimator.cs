@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 
 namespace CS5410
 {
@@ -35,11 +34,22 @@ namespace CS5410
 
         public void draw(SpriteBatch spriteBatch, Objects.Shrooms model)
         {
-            spriteBatch.Draw(
+            if (model.isPoisoned)
+            {
+                spriteBatch.Draw(
                 m_spriteSheet,
                 new Rectangle((model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
-                new Rectangle(m_subImageWidth * model.Damage, m_spriteLvlId * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
+                new Rectangle(m_subImageWidth * model.Damage, (m_spriteLvlId + 1) * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
                 Color.White);
+            }
+            else
+            {
+                spriteBatch.Draw(
+                    m_spriteSheet,
+                    new Rectangle((model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
+                    new Rectangle(m_subImageWidth * model.Damage, m_spriteLvlId * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
+                    Color.White);
+            }
         }
     }
 }

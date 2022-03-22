@@ -1,6 +1,4 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
 
 namespace CS5410.Objects
 {
@@ -29,7 +27,7 @@ namespace CS5410.Objects
         public bool collide(AnimatedSprite other)
         {
             //Vector2 rect1 = this.m_center - (this.Size / 2);
-            Rectangle thisRec = new Rectangle((this.m_center - (this.Size / 2)).ToPoint(),this.Size.ToPoint());
+            Rectangle thisRec = new Rectangle((this.m_center - (this.Size / 2)).ToPoint(), this.Size.ToPoint());
             Rectangle othRec = new Rectangle((other.m_center - (other.Size / 2)).ToPoint(), other.Size.ToPoint());
 
             return thisRec.Intersects(othRec);

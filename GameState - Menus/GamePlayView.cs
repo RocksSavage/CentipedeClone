@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
-using System.Collections.Generic;
 
 namespace CS5410
 {
@@ -65,9 +64,10 @@ namespace CS5410
             gameBoard.CellWidth = m_gameBoardCellWidth;
             gameBoard.Width = m_gameBoardWidth;
             gameBoard.Height = m_gameBoardHeight;
-            gameBoard.PlayerBarrier = 2* (m_gameBoardHeight / 3);
+            gameBoard.PlayerBarrier = 2 * (m_gameBoardHeight / 3);
             gameBoard.Columns = gameBoard.Width / gameBoard.CellWidth;
             gameBoard.HalfCellWidth = gameBoard.CellWidth / 2;
+            gameBoard.HalfCellHeight = gameBoard.CellHeight / 2;
             gameBoard.ShroomRows = (m_cellQuanityY - 2);
             gameBoard.ShroomRowSpace = gameBoard.ShroomRows * gameBoard.CellHeight;
 
@@ -115,19 +115,19 @@ namespace CS5410
             // create spider animator
             m_spiderAnimator = new AnimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
-                new int[] { 20, 20, 20, 20, 20, 20, 20, 20 },
+                new int[] { 20, 20, 20, 20 },
                 6);
 
             // create scorpion animator
             m_scorpionAnimator = new AnimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
-                new int[] { 30, 30, 30, 30 },
+                new int[] { 30, 30, 30},
                 8);
 
             // create and place player
             m_gameAgents.m_player = new Objects.Player(
-                new Vector2(m_gameBoardCellWidth2,m_gameBoardCellHeight),
-                new Vector2(m_gameBoardCenterX, m_gameBoardHeight ),
+                new Vector2(m_gameBoardCellWidth2, m_gameBoardCellHeight),
+                new Vector2(m_gameBoardCenterX, m_gameBoardHeight),
                 this.m_gameAgents,
                 150f
                 );
@@ -192,6 +192,7 @@ namespace CS5410
                     );
             }
 
+            // Spawning Spiders, Spawning Spiders, Spawning Spiders
             if (m_gameAgents.m_spiderList.Count < 1)
             {
                 bool goingWest = rmd.Next(1) == 0;
@@ -201,7 +202,7 @@ namespace CS5410
                 m_gameAgents.m_spiderList.Add(
                     new Objects.Spider(
                         new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
-                        new Vector2( gameBoard.Left, gameBoard.Height - 100),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        new Vector2(gameBoard.Left, gameBoard.Height - 100),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
                         m_gameAgents,
                         100f,
                         false,//goingWest,
@@ -210,18 +211,20 @@ namespace CS5410
                     );
             }
 
+            // Spawning Scorpions!
             if (m_gameAgents.m_scorpionList.Count < 1)
             {
                 bool goingWest = rmd.Next(1) == 0;
                 var spawnZoneFloor = gameBoard.CellHeight;
-                var spawnY = spawnZoneFloor + rmd.Next(gameBoard.ShroomRowSpace - spawnZoneFloor);
+
+                var spawnY = gameBoard.HalfCellHeight + gameBoard.CellHeight * rmd.Next(gameBoard.ShroomRows);
 
                 m_gameAgents.m_scorpionList.Add(
                     new Objects.Scorpion(
                         new Vector2(m_gameBoardCellWidth2, gameBoard.CellHeight),
-                        new Vector2(gameBoard.Left, 300),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        new Vector2(gameBoard.Right - gameBoard.CellWidth, spawnY),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
                         m_gameAgents,
-                        100f,
+                        280f,
                         false
                         )
                     );
@@ -255,7 +258,7 @@ namespace CS5410
             {
                 m_shroomAnimator.draw(m_spriteBatch, shroom);
             }
-            
+
             foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
             {
                 m_lazerAnimator.draw(m_spriteBatch, lazer);
@@ -281,7 +284,7 @@ namespace CS5410
                 m_playerAnimator.draw(m_spriteBatch, player);
             }
 
-            m_scoreAnimator.draw(m_spriteBatch, m_graphics, m_font, m_gameAgents.m_player.Lives,m_gameAgents.m_score);
+            m_scoreAnimator.draw(m_spriteBatch, m_graphics, m_font, m_gameAgents.m_player.Lives, m_gameAgents.m_score);
 
             if (m_gmover)
             {

@@ -13,7 +13,7 @@ namespace CS5410
         private int m_gameBoardOriginx;
         private int m_gameBoardHeight;
 
-        public ScoreAnimator(Texture2D spriteSheet, int gameBoardOriginX, int gameBoardHeight )
+        public ScoreAnimator(Texture2D spriteSheet, int gameBoardOriginX, int gameBoardHeight)
         {
             this.m_spriteSheet = spriteSheet;
             m_gameBoardHeight = gameBoardHeight;
@@ -22,7 +22,7 @@ namespace CS5410
         }
 
         public void update(GameTime gameTime)
-        { 
+        {
             //
         }
 
@@ -40,10 +40,10 @@ namespace CS5410
             {
                 spriteBatch.Draw(
                     m_spriteSheet,
-                    new Rectangle(cursor, 0, gameBoard.CellWidth,gameBoard.CellHeight),
-                    new Rectangle(3,9,8,8),
+                    new Rectangle(cursor, 0, gameBoard.CellWidth, gameBoard.CellHeight),
+                    new Rectangle(3, 9, 8, 8),
                     Color.White);
-                cursor -= gameBoard.CellWidth+2;
+                cursor -= gameBoard.CellWidth + 2;
             }
         }
     }

@@ -1,30 +1,29 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 
 namespace CS5410
 {
-	public class GameAgents
-	{
+    public class GameAgents
+    {
         public List<Objects.Shrooms> m_shroomsList = new List<Objects.Shrooms>();
         public List<Objects.Shrooms> m_rmShroomsList = new List<Objects.Shrooms>();
-		public List<Objects.Lazer> m_lazerList = new List<Objects.Lazer>();
+        public List<Objects.Lazer> m_lazerList = new List<Objects.Lazer>();
         public List<Objects.Lazer> m_rmLazerList = new List<Objects.Lazer>();
         public List<Objects.Player> m_playerList = new List<Objects.Player>();
         public List<Objects.Player> m_rmPlayerList = new List<Objects.Player>();
         public List<Objects.Flea> m_fleaList = new List<Objects.Flea>();
         public List<Objects.Flea> m_rmFleaList = new List<Objects.Flea>();
         public List<Objects.Spider> m_spiderList = new List<Objects.Spider>();
-        public List<Objects.Spider> m_rmSpiderList = new List<Objects.Spider>(); 
+        public List<Objects.Spider> m_rmSpiderList = new List<Objects.Spider>();
         public List<Objects.Scorpion> m_scorpionList = new List<Objects.Scorpion>();
-        public List<Objects.Scorpion> m_rmScorpionList = new List<Objects.Scorpion>(); 
+        public List<Objects.Scorpion> m_rmScorpionList = new List<Objects.Scorpion>();
 
         public int m_score = 0;
         public Objects.Player m_player;
 
         GamePlayView m_gamePlayView;
 
-		public GameAgents(GamePlayView gamePlayView)
+        public GameAgents(GamePlayView gamePlayView)
         {
             m_gamePlayView = gamePlayView;
         }
@@ -46,7 +45,7 @@ namespace CS5410
         }
         public void unregisterAnimatedSprites()
         {
-            
+
 
             m_playerList.RemoveAll(item => m_rmPlayerList.Contains(item));
             m_shroomsList.RemoveAll(item => m_rmShroomsList.Contains(item));
