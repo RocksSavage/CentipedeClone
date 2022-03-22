@@ -21,6 +21,7 @@ namespace CS5410
         private AnimatedSprite m_fleaAnimator;
         private AnimatedSprite m_spiderAnimator;
         private AnimatedSprite m_scorpionAnimator;
+        private CentipedeAnimator m_centipedeAnimator;
 
         int m_cellQuanityX = 30;
         int m_cellQuanityY = 20;
@@ -109,20 +110,26 @@ namespace CS5410
             // create flea animator
             m_fleaAnimator = new AnimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
-                new int[] { 30, 30, 30, 30 },
+                new int[] { 60, 60, 60, 60 },
                 7);
 
             // create spider animator
             m_spiderAnimator = new AnimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
-                new int[] { 20, 20, 20, 20 },
+                new int[] { 40, 40, 40, 40, 40, 40, 40, 40 },
                 6);
 
             // create scorpion animator
             m_scorpionAnimator = new AnimatedSprite(
                 contentManager.Load<Texture2D>("spritesheet-general"),
-                new int[] { 30, 30, 30},
+                new int[] { 60, 60, 60, 60},
                 8);
+
+            // create centipede animator
+            m_centipedeAnimator = new CentipedeAnimator(
+                contentManager.Load<Texture2D>("spritesheet-general"),
+                new int[] { 40, 40, 40, 40, 40, 40, 40, 40 },
+                5);
 
             // create and place player
             m_gameAgents.m_player = new Objects.Player(
@@ -230,6 +237,20 @@ namespace CS5410
                     );
             }
 
+            // Spawning Centipede!
+            if (m_gameAgents.m_centipedeList.Count < 1)
+            {
+                m_gameAgents.m_centipedeList.Add(
+                    new Objects.Centipede(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left+gameBoard.HalfCellWidth,gameBoard.HalfCellHeight),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        m_gameAgents,
+                        150f,
+                        false
+                        )
+                    );
+            }
+
             // let moving things get a chance to move
             foreach (Objects.Lazer lazer in m_gameAgents.m_lazerList)
             {
@@ -247,7 +268,16 @@ namespace CS5410
             {
                 scorpion.update(gameTime);
             }
+            foreach (Objects.Centipede centipede in m_gameAgents.m_centipedeList)
+            {
+                // Double loops in the future?
+                centipede.update(gameTime);
+            }
+
             m_fleaAnimator.update(gameTime);
+            m_spiderAnimator.update(gameTime);
+            m_scorpionAnimator.update(gameTime);
+            m_centipedeAnimator.update(gameTime);
         }
 
         public override void render(GameTime gameTime)
@@ -277,6 +307,11 @@ namespace CS5410
             foreach (Objects.Scorpion scorpion in m_gameAgents.m_scorpionList)
             {
                 m_scorpionAnimator.draw(m_spriteBatch, scorpion);
+            }
+            
+            foreach (Objects.Centipede centipede in m_gameAgents.m_centipedeList)
+            {
+                m_centipedeAnimator.draw(m_spriteBatch, centipede);
             }
 
             foreach (Objects.Player player in m_gameAgents.m_playerList)

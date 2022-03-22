@@ -22,13 +22,6 @@ namespace CS5410
 
         public void update(GameTime gameTime)
         {
-            //m_animationTime += gameTime.ElapsedGameTime;
-            //if (m_animationTime.TotalMilliseconds >= m_spriteTime[m_subImageIndex])
-            //{
-            //    m_animationTime -= TimeSpan.FromMilliseconds(m_spriteTime[m_subImageIndex]);
-            //    m_subImageIndex++;
-            //    m_subImageIndex = m_subImageIndex % m_spriteTime.Length;
-            //}
 
         }
 

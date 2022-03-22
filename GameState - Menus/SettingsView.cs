@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.Linq;
 
 namespace CS5410
 {
@@ -33,6 +34,8 @@ namespace CS5410
             {
                 // check and fill any outstanding key assignments
                 Keys[] pkeys = Keyboard.GetState().GetPressedKeys(); /// bug here, could fix by doing a delta list. see GetPRessedKeys(Keys[] array)
+                if (pkeys[0] == Keys.Enter)
+                    pkeys = pkeys.Where((source, index) => index != 0).ToArray();
                 if (ControllerState.MoveLeft == Keys.None && pkeys.Length > 0)
                 {
                     ControllerState.MoveLeft = pkeys[0];

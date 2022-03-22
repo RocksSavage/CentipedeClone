@@ -17,6 +17,9 @@ namespace CS5410
         public List<Objects.Spider> m_rmSpiderList = new List<Objects.Spider>();
         public List<Objects.Scorpion> m_scorpionList = new List<Objects.Scorpion>();
         public List<Objects.Scorpion> m_rmScorpionList = new List<Objects.Scorpion>();
+        public List<Objects.Centipede> m_centipedeList = new List<Objects.Centipede>();
+        public List<Objects.Centipede> m_rmCentipedeList = new List<Objects.Centipede>();
+
 
         public int m_score = 0;
         public Objects.Player m_player;
@@ -53,6 +56,7 @@ namespace CS5410
             m_fleaList.RemoveAll(item => m_rmFleaList.Contains(item));
             m_spiderList.RemoveAll(item => m_rmSpiderList.Contains(item));
             m_scorpionList.RemoveAll(item => m_rmScorpionList.Contains(item));
+            m_centipedeList.RemoveAll(item => m_rmCentipedeList.Contains(item));
 
             // clear old lists
             m_rmPlayerList.Clear();
@@ -61,6 +65,7 @@ namespace CS5410
             m_rmFleaList.Clear();
             m_rmSpiderList.Clear();
             m_rmScorpionList.Clear();
+            m_rmCentipedeList.Clear();
         }
         /// <summary>
         /// Currently only Lazer uses this so its safe to use for points tracking. 
@@ -98,15 +103,32 @@ namespace CS5410
                     return true;
                 }
             }
+            
+            foreach (Objects.Centipede ee in m_centipedeList)
+            {
+                if (model.collide((Objects.AnimatedSprite)ee))
+                {
+                    m_rmCentipedeList.Add(ee);
+                    m_score += 10;
+                    return true;
+                }
+            }
 
             return false;
         }
-        public Objects.Shrooms shroomCollision(Objects.AnimatedSprite model)
+        public Objects.Shrooms shroomCollision(Objects.AnimatedSprite model, Objects.AnimatedSprite exceptionPos = null)
         {
             foreach (Objects.Shrooms ee in m_shroomsList)
             {
+                if (exceptionPos != null)
+                {
+                    if (model.collide((Objects.AnimatedSprite)exceptionPos))
+                        continue;
+                }
+
                 if (model.collide((Objects.AnimatedSprite)ee))
                     return ee;
+                
             }
             return null;
         }

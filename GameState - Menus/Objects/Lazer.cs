@@ -19,7 +19,6 @@ namespace CS5410.Objects
         }
         public void moveUp(GameTime gameTime)
         {
-            //TODO 
             var nextspc = new Vector2(this.m_center.X, m_center.Y - m_speed * (float)gameTime.ElapsedGameTime.TotalSeconds);
             var spriteExample = new AnimatedSprite(this.Size, nextspc);
             Shrooms collider = m_gameAgents.shroomCollision(spriteExample);
