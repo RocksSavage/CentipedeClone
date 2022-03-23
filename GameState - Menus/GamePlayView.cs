@@ -238,7 +238,7 @@ namespace CS5410
             }
 
             // Spawning Centipede!
-            if (m_gameAgents.m_centipedeList.Count < 1)
+            if (m_gameAgents.m_centipedeList.Count == 0)
             {
                 m_gameAgents.m_centipedeList.Add(
                     new Objects.Centipede(
@@ -246,7 +246,48 @@ namespace CS5410
                         new Vector2(gameBoard.Left+gameBoard.HalfCellWidth,gameBoard.HalfCellHeight),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
                         m_gameAgents,
                         150f,
-                        false
+                        false,
+                        true
+                        )
+                    );
+                m_gameAgents.m_centipedeList.Add(
+                    new Objects.Centipede(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left + gameBoard.HalfCellWidth + gameBoard.CellWidth*1, gameBoard.HalfCellHeight),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        m_gameAgents,
+                        150f,
+                        false,
+                        true
+                        )
+                    );
+                m_gameAgents.m_centipedeList.Add(
+                    new Objects.Centipede(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left + gameBoard.HalfCellWidth + gameBoard.CellWidth * 2, gameBoard.HalfCellHeight),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        m_gameAgents,
+                        150f,
+                        false,
+                        true
+                        )
+                    );
+                m_gameAgents.m_centipedeList.Add(
+                    new Objects.Centipede(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left + gameBoard.HalfCellWidth + gameBoard.CellWidth * 3, gameBoard.HalfCellHeight),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        m_gameAgents,
+                        150f,
+                        false,
+                        true
+                        )
+                    );
+                m_gameAgents.m_centipedeList.Add(
+                    new Objects.Centipede(
+                        new Vector2(gameBoard.CellWidth, gameBoard.CellHeight),
+                        new Vector2(gameBoard.Left + gameBoard.HalfCellWidth + gameBoard.CellWidth * 4, gameBoard.HalfCellHeight),//new Vector2(goingWest? gameBoard.Left : gameBoard.Right, 550),
+                        m_gameAgents,
+                        150f,
+                        false,
+                        true
                         )
                     );
             }

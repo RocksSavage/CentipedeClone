@@ -51,7 +51,7 @@ namespace CS5410
                 spriteBatch.Draw(
                     m_spriteSheet,
                     new Rectangle((model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
-                    new Rectangle(m_subImageIndex * m_subImageWidth, (m_spriteLvlId + (model.west ? -1 : 0))* 9, m_subImageWidth, m_subImageHeight), // Source sub-texture
+                    new Rectangle(m_subImageIndex * (m_subImageWidth +2), (m_spriteLvlId + (model.west ? -1 : 0))* 9, m_subImageWidth, m_subImageHeight), // Source sub-texture
                     Color.White);
             }
         }

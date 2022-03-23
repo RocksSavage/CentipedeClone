@@ -31,7 +31,7 @@ namespace CS5410.Objects
                 m_gameAgents.m_player.Lives--;
             }
 
-
+            
             if (
                 ((nextspc.Y - (gameBoard.CellHeight / 2)) % gameBoard.CellHeight < 5) && //only on grid spaces
                 (nextspc.Y < gameBoard.ShroomRows * gameBoard.CellHeight))
@@ -39,7 +39,7 @@ namespace CS5410.Objects
                 Shrooms collider = m_gameAgents.shroomCollision(spriteExample);
                 Random rmd = new Random();
 
-                if (collider == null && rmd.Next(5) < 2)
+                if (collider == null && rmd.Next(10) < 2)
                 {
                     m_gameAgents.m_shroomsList.Add(
                         new Shrooms(

@@ -14,7 +14,7 @@ namespace CS5410.Objects
         public bool west;
         public bool north;
         AnimatedSprite exceptionPos;
-        public Centipede(Vector2 size, Vector2 center, GameAgents gameAgents, float speed, bool west, bool north = false) : base(size, center)
+        public Centipede(Vector2 size, Vector2 center, GameAgents gameAgents, float speed, bool west, bool isHead = false, bool north = false) : base(size, center)
         {
             m_speed = speed;
             m_gameAgents = gameAgents;
@@ -57,13 +57,12 @@ namespace CS5410.Objects
                 this.isPoisoned=true;
 
             if (north && 
-                (m_center.Y - gameBoard.ShroomRowSpace > 0) &&
-                (gameBoard.ShroomRowSpace + gameBoard.CellHeight - m_center.Y < 0)) // hits glass ceiling
-                north = true;
-
-            if ((m_center.Y - (gameBoard.Height - gameBoard.CellHeight) >= 0)) // hits floor
-            {
+                (m_center.Y < gameBoard.ShroomRowSpace)) // hits glass ceiling
                 north = false;
+
+            if ((m_center.Y > gameBoard.Height)) // hits floor
+            {
+                north = true;
                 isPoisoned = false;
             }
 
