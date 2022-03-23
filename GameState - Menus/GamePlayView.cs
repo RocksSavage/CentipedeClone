@@ -17,7 +17,7 @@ namespace CS5410
         private ShroomAnimator m_shroomAnimator;
         private InanimatedSprite m_playerAnimator;
         private ScoreAnimator m_scoreAnimator;
-        private InanimatedSprite m_lazerAnimator;
+        private LazerAnimator m_lazerAnimator;
         private AnimatedSprite m_fleaAnimator;
         private AnimatedSprite m_spiderAnimator;
         private AnimatedSprite m_scorpionAnimator;
@@ -102,7 +102,7 @@ namespace CS5410
                 14);
 
             // create lazer animator
-            m_lazerAnimator = new InanimatedSprite(
+            m_lazerAnimator = new LazerAnimator(
                 contentManager.Load<Texture2D>("spritesheet-general"),
                 15, //15
                 13);//13

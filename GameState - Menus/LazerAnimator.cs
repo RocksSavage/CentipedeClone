@@ -29,8 +29,8 @@ namespace CS5410
         {
             spriteBatch.Draw(
                 m_spriteSheet,
-                new Rectangle((model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
-                new Rectangle(m_subImageIndex /** model.Damage*/, m_spriteLvlId * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
+                new Rectangle((model.Center).ToPoint(), new Point(gameBoard.CellWidth / 8, gameBoard.CellHeight - 5)),//new Rectangle((model.Center - (model.Size / 2)).ToPoint(), model.Size.ToPoint()),
+                new Rectangle(7, 119, 1, 6),//new Rectangle(m_subImageIndex /** model.Damage*/, m_spriteLvlId * (m_subImageHeight + 1), m_subImageWidth, m_subImageHeight),
                 Color.White);
         }
     }
